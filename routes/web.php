@@ -16,5 +16,8 @@ Route::get('/', function () {
     return view('home');
 });
 
-
+Route::get('testmail',function(){
+    $name = "Các bạn";
+    Mail::to('anhvca1234@gmail.com')->send(new \App\Mail\MyTestEmail($name));
+});
 
