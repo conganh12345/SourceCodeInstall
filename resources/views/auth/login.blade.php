@@ -52,7 +52,7 @@
 </head>
 <body>
 
-    <form method="POST" action="{{ url('/login') }}">
+    <form method="POST" action="{{ url('/auth/login') }}">
         @csrf
 
         <div>

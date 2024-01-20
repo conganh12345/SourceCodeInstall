@@ -2,6 +2,8 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
+use App\Http\Middleware\CheckLogin;
+
 
 /*
 |--------------------------------------------------------------------------
@@ -13,6 +15,7 @@ use App\Http\Controllers\AuthController;
 | be assigned to the "web" middleware group. Make something great!
 |
 */
+//Hiện trên ở giữa màn hình
 Route::get('/', function () {
     return view('home');
 });
@@ -23,12 +26,17 @@ Route::get('testmail',function(){
     $name = "Các bạn";
     Mail::to('anhvca1234@gmail.com')->send(new \App\Mail\MyTestEmail($name));
 });
-//Form đăng ký
-Route::get('/register', [AuthController::class, 'showFormRegister']);
-Route::get('/verify-account/{email}', [AuthController::class, 'verify']);
-Route::post('/register', [AuthController::class, 'register']);
 
 
 Route::group(['prefix' => 'auth'], function () {
-    Route::view('login', 'auth.login');
+    // Form đăng ký
+    Route::get('/register', [AuthController::class, 'showFormRegister'])->name('auth.register');
+
+    Route::get('/verify-account/{email}', [AuthController::class, 'verify']);
+    Route::get('/noverify-account/{email}', [AuthController::class, 'noverify']);
+    Route::post('/register', [AuthController::class, 'register']);
+
+    // Form đăng nhập
+    Route::get('/login', [AuthController::class, 'showFormlogin'])->name('auth.login');
+    Route::post('/login', [AuthController::class, 'login'])->middleware('admin');
 });

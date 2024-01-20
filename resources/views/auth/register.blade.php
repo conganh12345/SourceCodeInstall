@@ -51,7 +51,7 @@
     </style>
 </head>
 <body>
-    <form method="POST" action="{{ url('/register') }}">
+    <form method="POST" action="{{ url('/auth/register') }}">
         @csrf
 
         <div>

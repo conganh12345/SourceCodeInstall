@@ -24,7 +24,14 @@ class AuthRequest extends FormRequest
         return [
             'first_name' => 'required|string|max:30',
             'last_name' => 'required|string|max:30',
-            'email' => 'required|string|email|max:100|unique:users',
+            'email' => [
+                'required',
+                'string',
+                'email',
+                'max:100',
+                'unique:users',
+                'regex:/^[a-zA-Z0-9._%+-]+@gmail\.com$/i', // Kiểm tra email có phải là Gmail hay không
+            ],
             'password' => [
                 'required',
                 'string',
@@ -47,6 +54,7 @@ class AuthRequest extends FormRequest
             'email.email' => 'Trường :attribute không đúng định dạng email.',
             'email.max' => 'Trường :attribute không được vượt quá :max ký tự.',
             'email.unique' => 'Trường :attribute đã tồn tại trong hệ thống.',
+            'email.regex' => 'Trường :attribute phải là địa chỉ email của Gmail.',
 
             'password.required' => 'Trường :attribute bắt buộc phải nhập.',
             'password.min' => 'Trường :attribute phải có ít nhất :min ký tự.',
