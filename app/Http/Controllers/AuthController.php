@@ -8,7 +8,7 @@ use Illuminate\Support\Facades\Mail;
 use GuzzleHttp\Client;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Auth;
-
+use Illuminate\Support\Facades\Session;
 
 class AuthController extends Controller
 {
@@ -39,14 +39,15 @@ class AuthController extends Controller
             'last_name' => $request->input('last_name'),
             'email' => $request->input('email'),
             'password' => bcrypt($request->input('password')),
-            'status' => 0, // Giá trị mặc định là 0 (chờ phê duyệt)
+            'status' => '0', // Giá trị mặc định là 0 (chờ phê duyệt)
         ]);
             // Gửi mail tới người đăng ký
         try {
             Mail::to($user->email)->send(new \App\Mail\VerifyAccount($user));
         } catch (\Exception $e) {
             // Nếu gửi email thất bại, đặt status thành 3
-            $user->status = 3; //
+            $user->status = '3';
+
             $user->save();
             return redirect('/auth/register')->with('error', 'Đăng ký thất bại! Không thể gửi email xác nhận. Tài khoản có thể bị khóa hoặc không tồn tại.');
         }
@@ -66,7 +67,7 @@ class AuthController extends Controller
         }
 
         // Cập nhật trạng thái tùy thuộc vào giá trị status
-        $user->status = 1; // Hoặc giá trị khác tùy thuộc vào nhu cầu của bạn
+        $user->status = '1';
         $user->save();
 
 
@@ -82,24 +83,33 @@ class AuthController extends Controller
         }
 
         // Cập nhật trạng thái tùy thuộc vào giá trị status
-        $user->status = 2;
+        $user->status = '2';
         $user->save();
 
           return redirect()->route('auth.register')->with('success', 'Từ chối xác thực thành công.');
     }
     public function login(Request $request)
-    {
-        $email =  $request->input('email');
-        $password =  $request->input('password');
+{
+    $email = $request->input('email');
+    $password = $request->input('password');
 
-        if(Auth::attempt(['email'=>$email, 'password'=>$password])){
-            // return view('thanhcong',['user'=>Auth::user()]);
-            return 'Đăng nhập ok';
+    if (Auth::attempt(['email' => $email, 'password' => $password])) {
+        $user = Auth::user();
+
+        if ($user->status == '1') {
+            return view('home', ['user' => $user]);
+        } elseif ($user->status == '0') {
+            Auth::logout(); // Đăng xuất nếu trạng thái là 0
+            Session::flash('login_error', 'Tài khoản của bạn đang chờ xác nhận. Vui lòng kiểm tra email hoặc liên hệ hỗ trợ.');
+            return redirect()->route('auth.login');
+        } elseif ($user->status == '2') {
+            Auth::logout(); // Đăng xuất nếu trạng thái là 2
+            Session::flash('login_error', 'Tài khoản của bạn đã bị từ chối');
+            return redirect()->route('auth.login');
         }
-
-         else{
-            return back()->with('error', 'Email hoặc mật khẩu không đúng');
-
-         }
+    } else {
+        Session::flash('login_error', 'Email hoặc mật khẩu không đúng');
+        return back();
     }
+}
 }

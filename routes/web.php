@@ -1,10 +1,10 @@
 <?php
 
+use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
+
 use App\Http\Controllers\AuthController;
 use App\Http\Middleware\CheckLogin;
-
-
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -15,10 +15,9 @@ use App\Http\Middleware\CheckLogin;
 | be assigned to the "web" middleware group. Make something great!
 |
 */
+
 //Hiện trên ở giữa màn hình
-Route::get('/', function () {
-    return view('home');
-});
+
 //Sử dụng Accessor để tạo attribute name từ first_name và last_name, có thể gọi $user->name
 Route::get('user/{userId}', [AuthController::class, 'showUserName']);
 //Test gửi mail qua Mailtrap
@@ -38,5 +37,8 @@ Route::group(['prefix' => 'auth'], function () {
 
     // Form đăng nhập
     Route::get('/login', [AuthController::class, 'showFormlogin'])->name('auth.login');
-    Route::post('/login', [AuthController::class, 'login'])->middleware('admin');
+    Route::post('/login', [AuthController::class, 'login']);
+
+    Route::view('home','home')->middleware('admin');
 });
+
