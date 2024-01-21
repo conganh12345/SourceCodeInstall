@@ -15,33 +15,25 @@
 
     <div class="login-box">
         <div class="login-logo">
-            <a href="#"><b>Sign Up</b></a>
+            <a href="#"><b>Email Address</b></a>
         </div>
 
         <div class="login-box-body">
-            <p class="login-box-msg">Sign in to start your session</p>
+            <p class="login-box-msg">Please enter the registered email address</p>
 
-            <form method="POST" action="{{ url('/auth/login') }}">
+            <form method="POST" action="{{ url('/auth/forgot-password') }}">
                 @csrf
 
                 <div class="form-group">
-                    <label for="email">Email</label>
-                    <input type="email" class="form-control" name="email" id="email" required>
-                </div>
 
-                <div class="form-group">
-                    <label for="password">Password</label>
-                    <input type="password" class="form-control" name="password" id="password" required>
+                    <input type="email" class="form-control" name="email" id="email" value="{{ old('email') }}"required>
                 </div>
-
-                <div class="row">
-                    <div class="col-xs-12">
-                        <a href="{{ route('auth.forgotpass') }}" class="text-right">Forgot Password?</a>
-                    </div>
-                </div>
+                @error('email')
+                    <span style="color: red">{{ $message }}</span>
+                @enderror
 
                 <div>
-                    <button type="submit" class="btn btn-primary btn-block btn-flat">Sign In</button>
+                    <button type="submit" class="btn btn-primary btn-block btn-flat">Send Mail</button>
                 </div>
             </form>
 

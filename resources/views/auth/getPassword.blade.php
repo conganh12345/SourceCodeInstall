@@ -15,33 +15,32 @@
 
     <div class="login-box">
         <div class="login-logo">
-            <a href="#"><b>Sign Up</b></a>
+            <a href="#"><b>Get password</b></a>
         </div>
 
         <div class="login-box-body">
-            <p class="login-box-msg">Sign in to start your session</p>
+            <p class="login-box-msg">Reset your password</p>
 
-            <form method="POST" action="{{ url('/auth/login') }}">
+            <form method="POST" >
                 @csrf
 
-                <div class="form-group">
-                    <label for="email">Email</label>
-                    <input type="email" class="form-control" name="email" id="email" required>
-                </div>
 
                 <div class="form-group">
-                    <label for="password">Password</label>
-                    <input type="password" class="form-control" name="password" id="password" required>
+                    <label for="password">New password</label>
+                    <input type="password" class="form-control" name="password" id="password" value="{{ old('password') }}" required>
                 </div>
-
-                <div class="row">
-                    <div class="col-xs-12">
-                        <a href="{{ route('auth.forgotpass') }}" class="text-right">Forgot Password?</a>
-                    </div>
+                @error('password')
+                <span style="color: red">{{ $message }}</span>
+            @enderror
+                <div class="form-group">
+                    <label for="password">Confirm new password</label>
+                    <input type="password" class="form-control" name="confirmpassword" id="confirmpassword"  required>
                 </div>
-
+                @error('confirmpassword')
+                <span style="color: red">{{ $message }}</span>
+            @enderror
                 <div>
-                    <button type="submit" class="btn btn-primary btn-block btn-flat">Sign In</button>
+                    <button type="submit" class="btn btn-primary btn-block btn-flat">Confirm</button>
                 </div>
             </form>
 
