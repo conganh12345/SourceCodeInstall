@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 use App\Models\User;
 use Illuminate\Http\Request;
 use App\Http\Requests\AuthRequest;
+use App\Http\Requests\ProfileRequest;
 use App\Http\Requests\EmailRequest;
 use App\Http\Requests\PasswordRequest;
 use Illuminate\Support\Facades\Mail;
@@ -149,5 +150,27 @@ class AuthController extends Controller
         return redirect()->route('auth.login')->with('success', 'Đổi mật khẩu thành công,bạn có thể đăng nhập');
 
 }
+        public function editProfile()
+        {
+            // Lấy thông tin người dùng từ Auth hoặc từ model User
+            $user = Auth::user(); // Sử dụng Auth để lấy người dùng đã đăng nhập
+
+            return view('Post.updateprofile', compact('user'));
+        }
+
+        public function editedProfile(ProfileRequest $request)
+    {
+
+        $user = Auth::user(); // Lấy thông tin người dùng từ Auth
+
+        $user->update([
+            'first_name' => $request->input('first_name'),
+            'last_name' => $request->input('last_name'),
+            'address' => $request->input('address'),
+        ]);
+
+        return redirect()->route('update_profile')->with('success', 'Hồ sơ đã được cập nhật thành công');
+    }
+
 
 }
