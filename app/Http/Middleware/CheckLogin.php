@@ -25,10 +25,13 @@ class CheckLogin
                 return $next($request);
             } elseif ($user->status == '0') {
                 Auth::logout();
-                return redirect()->route('auth.login')->with('error', 'Tài khoản của bạn đang chờ xác nhận. Vui lòng kiểm tra email hoặc liên hệ hỗ trợ.');
+                return redirect()->route('auth.login')->with('error', 'Tài khoản của bạn đang chờ xác nhận.');
             } elseif ($user->status == '2') {
                 Auth::logout();
                 return redirect()->route('auth.login')->with('error', 'Tài khoản của bạn đã bị từ chối');
+            }elseif ($user->status == '3') {
+                Auth::logout();
+                return redirect()->route('auth.login')->with('error', 'Tài khoản của bạn đã bị khóa');
             }
         } else {
             return back()->with('error', 'Email hoặc mật khẩu không đúng');

@@ -5,71 +5,17 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Login</title>
     <!-- Thêm đường dẫn đến CSS của AdminLTE -->
+    <link rel="stylesheet" href="https://adminlte.io/themes/v3/plugins/fontawesome-free/css/all.min.css">
     <link rel="stylesheet" href="https://adminlte.io/themes/v3/dist/css/adminlte.min.css">
 
-    <!-- Thêm đoạn mã CSS tùy chỉnh -->
-    <style>
-        body {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            height: 100vh;
-            margin: 0;
-            background-color: #d2d6de; /* Màu nền của trang */
-        }
+    <!-- Không cần sử dụng đoạn mã CSS tùy chỉnh vì bạn đã sử dụng CSS của AdminLTE -->
 
-        .login-box {
-            width: 320px;
-        }
-
-        .login-box-body {
-            background-color: #fff; /* Màu nền của form */
-            padding: 20px;
-            border-radius: 5px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-        }
-
-        .form-group {
-            margin-bottom: 20px;
-        }
-
-        label {
-            font-weight: 600;
-            margin-bottom: 5px;
-        }
-
-        input {
-            width: 100%;
-            padding: 10px;
-            margin-bottom: 10px;
-            box-sizing: border-box;
-            border: 1px solid #d2d6de; /* Màu viền của input */
-            border-radius: 5px;
-        }
-
-        .checkbox {
-            margin-bottom: 20px;
-        }
-
-        .btn {
-            background-color: #4caf50;
-            color: white;
-            padding: 12px;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-        }
-
-        .btn:hover {
-            background-color: #45a049;
-        }
-    </style>
 </head>
 <body class="hold-transition login-page">
 
     <div class="login-box">
         <div class="login-logo">
-            <a href="#"><b>Sign Up</b> </a>
+            <a href="#"><b>Sign Up</b></a>
         </div>
 
         <div class="login-box-body">
@@ -90,7 +36,6 @@
 
                 <div class="row">
                     <div class="col-xs-12">
-                        <!-- Thêm class "text-right" để căn phải -->
                         <a href="{{ url('/password/reset') }}" class="text-right">Forgot Password?</a>
                     </div>
                 </div>
@@ -100,12 +45,17 @@
                 </div>
             </form>
 
-            {{-- Thông báo đăng nhập thành công --}}
             @if(session('success'))
                 <script>
                     alert("{{ session('success') }}");
                 </script>
             @endif
+            @if(session('error'))
+                <script>
+                    alert("{{ session('error') }}");
+                </script>
+            @endif
+
         </div>
         <!-- /.login-box-body -->
     </div>

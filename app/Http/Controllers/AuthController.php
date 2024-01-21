@@ -94,22 +94,12 @@ class AuthController extends Controller
     $password = $request->input('password');
 
     if (Auth::attempt(['email' => $email, 'password' => $password])) {
-        $user = Auth::user();
+        return redirect()->route('post', ['user' => Auth::user()])->with('success', 'Đăng nhập thành công');
 
-        if ($user->status == '1') {
-            return view('home', ['user' => $user]);
-        } elseif ($user->status == '0') {
-            Auth::logout(); // Đăng xuất nếu trạng thái là 0
-            Session::flash('login_error', 'Tài khoản của bạn đang chờ xác nhận. Vui lòng kiểm tra email hoặc liên hệ hỗ trợ.');
-            return redirect()->route('auth.login');
-        } elseif ($user->status == '2') {
-            Auth::logout(); // Đăng xuất nếu trạng thái là 2
-            Session::flash('login_error', 'Tài khoản của bạn đã bị từ chối');
-            return redirect()->route('auth.login');
         }
-    } else {
-        Session::flash('login_error', 'Email hoặc mật khẩu không đúng');
-        return back();
-    }
+
+         else{
+            return redirect()->route('auth.login')->with('error', 'Đăng nhập thất bại');
+         }
 }
 }

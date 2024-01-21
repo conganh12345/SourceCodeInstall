@@ -39,6 +39,11 @@ Route::group(['prefix' => 'auth'], function () {
     Route::get('/login', [AuthController::class, 'showFormlogin'])->name('auth.login');
     Route::post('/login', [AuthController::class, 'login']);
 
-    Route::view('home','home')->middleware('admin');
+
+    Route::view('/post','post')->middleware('admin')->name('post');
+    Route::view('/home','home')->name('home');
+    Route::view('/listpost','Post.listpost')->name('listpost');
+    Route::view('/updateprofile','Post.updateprofile')->name('update_profile');
 });
+
 

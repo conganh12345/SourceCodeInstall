@@ -8,65 +8,13 @@
     <link rel="stylesheet" href="https://adminlte.io/themes/v3/dist/css/adminlte.min.css">
     <!-- Thêm đường dẫn đến Font Awesome để sử dụng icon -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
-    <!-- Thêm đoạn mã CSS tùy chỉnh -->
-    <style>
-        body {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            height: 100vh;
-            margin: 0;
-            background-color: #d2d6de; /* Màu nền của trang */
-        }
 
-        .register-box {
-            width: 360px;
-        }
-
-        .register-box-body {
-            background-color: #fff; /* Màu nền của form */
-            padding: 20px;
-            border-radius: 5px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-        }
-
-        .form-group {
-            margin-bottom: 20px;
-        }
-
-        label {
-            font-weight: 600;
-            margin-bottom: 5px;
-        }
-
-        input {
-            width: 100%;
-            padding: 10px;
-            margin-bottom: 10px;
-            box-sizing: border-box;
-            border: 1px solid #d2d6de; /* Màu viền của input */
-            border-radius: 5px;
-        }
-
-        .btn {
-            background-color: #4caf50;
-            color: white;
-            padding: 12px;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-        }
-
-        .btn:hover {
-            background-color: #45a049;
-        }
-    </style>
 </head>
 <body class="hold-transition register-page">
 
     <div class="register-box">
         <div class="register-logo">
-            <a href="#"><b>Log In</b> </a>
+            <a href="#"><b>Log In</b></a>
         </div>
 
         <div class="register-box-body">
