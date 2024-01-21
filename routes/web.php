@@ -49,5 +49,6 @@ Route::group(['prefix' => 'auth'], function () {
     Route::view('/post','post')->middleware('admin')->name('post');
     Route::view('/home','home')->name('home');
     Route::view('/listpost','Post.listpost')->name('listpost');
-    Route::view('/updateprofile','Post.updateprofile')->name('update_profile');
+    Route::get('/updateprofile',[AuthController::class, 'editProfile'])->name('update_profile');
+    Route::post('/updateprofile',[AuthController::class, 'editedProfile']);
 });

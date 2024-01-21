@@ -70,6 +70,19 @@
                     <button type="submit" class="btn btn-primary btn-block btn-flat">Register</button>
                 </div>
             </form>
+            @if(session('success'))
+            <script>
+                alert("{{ session('success') }}");
+            </script>
+        @endif
+        @if(session('error'))
+            <script>
+                alert("{{ session('error') }}");
+            </script>
+        @endif
+        <div style="margin-top: 20px; text-align: center;">
+            <p>Đã có tài khoản? <a href="{{ url('/auth/login') }}">Đăng nhập ngay</a></p>
+        </div>
         </div>
         <!-- /.register-box-body -->
     </div>

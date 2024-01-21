@@ -44,7 +44,10 @@
                     <button type="submit" class="btn btn-primary btn-block btn-flat">Sign In</button>
                 </div>
             </form>
-
+            <!-- Nút "Chưa có tài khoản" -->
+            <div style="margin-top: 20px; text-align: center;">
+                <p>Chưa có tài khoản? <a href="{{ url('/auth/register') }}">Đăng ký ngay</a></p>
+            </div>
             @if(session('success'))
                 <script>
                     alert("{{ session('success') }}");
