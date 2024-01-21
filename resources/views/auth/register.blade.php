@@ -58,7 +58,14 @@
                 @error('password')
                     <span style="color: red">{{ $message }}</span>
                 @enderror
+                <div class="form-group">
+                    <label for="password">Password</label>
+                    <input type="password" class="form-control" name="confirmpassword" id="confirmpassword"  required>
+                </div>
 
+                @error('confirmpassword')
+                    <span style="color: red">{{ $message }}</span>
+                @enderror
                 <div>
                     <button type="submit" class="btn btn-primary btn-block btn-flat">Register</button>
                 </div>

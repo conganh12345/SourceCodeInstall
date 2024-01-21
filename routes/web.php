@@ -39,11 +39,15 @@ Route::group(['prefix' => 'auth'], function () {
     Route::get('/login', [AuthController::class, 'showFormlogin'])->name('auth.login');
     Route::post('/login', [AuthController::class, 'login']);
 
+    Route::get('/forgot-password', [AuthController::class, 'forgotpasswword'])->name('auth.forgotpass');
+    Route::post('/forgot-password', [AuthController::class, 'postforgotpassword']);
+    Route::get('/get-password/{email}', [AuthController::class, 'getpasswword'])->name('auth.getpass');
+    Route::post('/get-password/{email}', [AuthController::class, 'getforgotpassword']);
 
+});
+Route::group(['prefix' => 'auth'], function () {
     Route::view('/post','post')->middleware('admin')->name('post');
     Route::view('/home','home')->name('home');
     Route::view('/listpost','Post.listpost')->name('listpost');
     Route::view('/updateprofile','Post.updateprofile')->name('update_profile');
 });
-
-

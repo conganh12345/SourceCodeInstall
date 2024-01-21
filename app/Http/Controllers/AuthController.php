@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 use App\Models\User;
 use Illuminate\Http\Request;
 use App\Http\Requests\AuthRequest;
+use App\Http\Requests\EmailRequest;
+use App\Http\Requests\PasswordRequest;
 use Illuminate\Support\Facades\Mail;
 use GuzzleHttp\Client;
 use Illuminate\Support\Facades\Http;
@@ -102,4 +104,50 @@ class AuthController extends Controller
             return redirect()->route('auth.login')->with('error', 'Đăng nhập thất bại');
          }
 }
+    public function forgotpasswword(){
+        return view('auth.forgotPass');
+    }
+    public function postforgotpassword(EmailRequest $request){
+            // Kiểm tra xem email đã tồn tại hay chưa
+            $existingUser = User::where('email', $request->input('email'))->first();
+
+            if (!$existingUser) {
+                // Email chưa tồn tại, tạo mới user
+                return back()->with('error', 'Email không tồn tại trong hệ thống');
+
+                // Thực hiện các công việc khác sau khi tạo user
+            } else {
+                Mail::to($existingUser->email)->send(new \App\Mail\MailForPassWord($existingUser));
+                return redirect()->route('auth.login')->with('success', 'Vui lòng kiểm tra email để thực hiện thay đổi mật khẩu');
+            }
+
+    }
+    public function getpasswword($email){
+
+
+            $user = User::where('email', $email)->first();
+
+            // Cập nhật trạng thái tùy thuộc vào giá trị status
+
+            return view('auth.getPassword', ['email' => $email]);
+
+    }
+
+    public function getforgotpassword(PasswordRequest $request,$email){
+
+
+        $user = User::where('email', $email)->first();
+
+
+        // Cập nhật trạng thái tùy thuộc vào giá trị status
+        $user->update([
+
+            'password' => bcrypt($request->input('password')),
+
+        ]);
+        $user->save();
+        return redirect()->route('auth.login')->with('success', 'Đổi mật khẩu thành công,bạn có thể đăng nhập');
+
+}
+
 }
