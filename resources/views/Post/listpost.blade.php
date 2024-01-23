@@ -4,12 +4,40 @@
 @section('title', 'Danh sách bài viết')
 
 @section('contents')
+<!-- Popup xác nhận xóa (Modal) -->
+<div class="modal fade" id="deleteModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <form action="{{ route('delete_post') }}" method="POST">
+            @csrf
+                    <div class="modal-header">
+                    <h3 class="modal-title fs-5" id="exampleModalLabel">Xóa bài viết</h3>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <input type="hidden" name="posts_delete_id" id="post_id">
+                    <h5>Bạn có chắc là muốn xóa bài viết này không?</h5>
+                    </div>
+                    <div class="modal-footer">
+                    <button type="submit" class="btn btn-primary">Xác nhận</button>
+                    </div>
+                </form>
+      </div>
+    </div>
+  </div>
+
     <!-- Content Header (Page header) -->
     <section class="content-header">
         <div class="container-fluid">
             <div class="row mb-2">
                 <div class="col-sm-6">
                     <h1>Danh sách bài viết</h1>
+                </div>
+                <div class="col-sm-6 text-right">
+                    <!-- Button to create a new post -->
+                    <a href="{{route('add_post')}}" class="btn btn-success">Tạo mới</a>
+                    <!-- Button to delete all posts (you may replace '#delete-all' with the actual route) -->
+                    <a href="{{route('delete_allpost')}}" class="btn btn-danger" id="delete-all">Xóa tất cả</a>
                 </div>
             </div>
         </div><!-- /.container-fluid -->
@@ -39,27 +67,39 @@
                                 </thead>
                                 <tbody>
                                     <!-- Duyệt qua danh sách bài viết và hiển thị thông tin -->
-                                    {{-- @foreach($posts as $post)
+                                    @foreach($posts as $post)
                                         <tr>
-                                            <td><img src="{{ $post->thumbnail }}" alt="Thumbnail" style="max-width: 100px;"></td>
+                                            <td> <img src="{{ asset('storage/images/' . $post->thumbnail) }}" alt="Thumbnail" style="max-width: 70px; max-height: 100px; width: auto; height: auto;"></td>
                                             <td>{{ $post->title }}</td>
                                             <td>{{ $post->description }}</td>
                                             <td>{{ $post->publish_date }}</td>
                                             <td>{{ $post->status }}</td>
                                             <td>
-                                                <!-- Icon delete -->
-                                                <a href="{{ route('delete.post', ['id' => $post->id]) }}"><i class="fas fa-trash"></i></a>
-                                                <!-- Icon edit -->
-                                                <a href="{{ route('edit.post', ['id' => $post->id]) }}"><i class="fas fa-edit"></i></a>
                                                 <!-- Icon show -->
-                                                <a href="{{ route('show.post', ['id' => $post->id]) }}"><i class="fas fa-eye"></i></a>
+                                   <!-- Button show -->
+                                                    <button onclick="window.location='{{ route('show_post') }}';" class="btn btn-info btn-sm" style="margin-right: 10px;"><i class="fas fa-eye"></i></button>
+
+                                                    <!-- Button edit -->
+                                                    <button onclick="window.location='{{ route('edit_post') }}';" class="btn btn-warning btn-sm" style="margin-right: 10px;"><i class="fas fa-edit"></i></button>
+
+                                                    <!-- Button delete -->
+                                                    <button class="btn btn-danger btn-sm deletePost" value="{{$post->id}}"><i class="fas fa-trash"></i></button>
+
                                             </td>
                                         </tr>
-                                    @endforeach --}}
+                                    @endforeach
+
                                 </tbody>
+
                             </table>
+
                         </div>
                         <!-- /.card-body -->
+                        <div class="card-footer clearfix">
+                            <ul class="pagination pagination-sm m-0 float-right">
+                                {{ $posts->links() }}
+                            </ul>
+                        </div>
                     </div>
                     <!-- /.card -->
                 </div>
@@ -88,3 +128,22 @@
         });
     </script>
 @endsection
+
+@section('delete')
+    <script>
+        $(document).ready(function(){
+            $('.deletePost').click(function(e){
+                e.preventDefault();
+
+                var post_id = $(this).val();
+                $('#post_id').val(post_id);
+                $('#deleteModal').modal('show');
+            })
+        })
+    </script>
+@endsection
+@if(session('success'))
+<script>
+    alert("{{ session('success') }}");
+</script>
+@endif
