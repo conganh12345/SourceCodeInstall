@@ -2,7 +2,7 @@
 
 use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
-
+use App\Http\Controllers\PostController;
 use App\Http\Controllers\AuthController;
 use App\Http\Middleware\CheckLogin;
 /*
@@ -48,7 +48,14 @@ Route::group(['prefix' => 'auth'], function () {
 Route::group(['prefix' => 'auth'], function () {
     Route::view('/post','post')->middleware('admin')->name('post');
     Route::view('/home','home')->name('home');
-    Route::view('/listpost','Post.listpost')->name('listpost');
+    Route::get('/listpost',[PostController::class, 'index'])->name('listpost');
+    Route::post('/delete_post',[PostController::class, 'destroy'])->name('delete_post');
+    Route::get('/delete_allpost',[PostController::class, 'destroyAll'])->name('delete_allpost');
+    Route::get('/add_post',[PostController::class, 'create'])->name('add_post');
+    Route::get('/edit_post',[PostController::class, 'showedit'])->name('edit_post');
+    Route::get('/show_post',[PostController::class, 'showpost'])->name('show_post');
     Route::get('/updateprofile',[AuthController::class, 'editProfile'])->name('update_profile');
     Route::post('/updateprofile',[AuthController::class, 'editedProfile']);
+
+    Route::get('/logout',[AuthController::class, 'logout'])->name('logout');
 });
