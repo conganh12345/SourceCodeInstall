@@ -3,7 +3,8 @@
 namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
-
+use Illuminate\Support\Facades\Password;
+use Illuminate\Validation\Rules\Password as PasswordRule;
 class PasswordRequest extends FormRequest
 {
     /**
@@ -25,8 +26,11 @@ class PasswordRequest extends FormRequest
             'password' => [
                 'required',
                 'string',
-                'min:8',
-                'regex:/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]+$/',
+                PasswordRule::min(8)
+                        ->mixedCase()
+                        ->letters()
+                        ->numbers()
+                        ->symbols(),   // Chứa cả chữ cái in hoa và chữ cái thường
             ],
             'confirmpassword' => [
                 'required',
@@ -38,10 +42,11 @@ class PasswordRequest extends FormRequest
     public function messages()
     {
         return [
-            'password.required' => 'Trường :attribute bắt buộc phải nhập.',
+            'password.required' => 'Trường :attribute là bắt buộc.',
             'password.min' => 'Trường :attribute phải có ít nhất :min ký tự.',
-            'password.regex' => 'Trường :attribute phải chứa ít nhất một ký tự thường, một ký tự hoa, một số, và một ký tự đặc biệt.',
-            'confirmpassword.required' => 'Trường :attribute bắt buộc phải nhập.',
+            'password.strong' => 'Trường :attribute phải chứa ít nhất một chữ cái thường, một chữ cái hoa, một số và một ký tự đặc biệt.',
+
+            'confirmpassword.required' => 'Trường :attribute là bắt buộc.',
             'confirmpassword.same' => 'Trường :attribute phải giống với mật khẩu.',
         ];
     }

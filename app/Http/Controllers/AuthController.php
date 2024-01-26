@@ -1,6 +1,7 @@
 <?php
 
 namespace App\Http\Controllers;
+use App\Services\AuthService;
 use App\Models\User;
 use Illuminate\Http\Request;
 use App\Http\Requests\AuthRequest;
@@ -15,166 +16,132 @@ use Illuminate\Support\Facades\Session;
 
 class AuthController extends Controller
 {
-    public function showUserName($userId)
-    {
-        $user = User::find($userId);
+    protected $authService;
 
-        if ($user) {
-            echo "Tên admin:", $user->name;
-        } else {
-            echo "User not found";
-        }
+    public function __construct(AuthService $authService)
+    {
+        $this->authService = $authService;
     }
-    public function showFormRegister(){
+
+
+
+    public function showFormRegister()
+    {
         return view('auth.register');
     }
-    public function showFormLogin(){
+
+    public function showFormLogin()
+    {
         return view('auth.login');
     }
-    public function logout(){
+
+    public function logout()
+    {
         Auth::logout();
-        return redirect()->route('auth.login');
+        return to_route('auth.login');
     }
+
     public function register(AuthRequest $request)
     {
+        $result = $this->authService->registerUser($request);
 
-
-        // Thêm dữ liệu vào cơ sở dữ liệu sử dụng Eloquent
-
-        $user = User::create([
-            'first_name' => $request->input('first_name'),
-            'last_name' => $request->input('last_name'),
-            'email' => $request->input('email'),
-            'password' => bcrypt($request->input('password')),
-            'status' => '0', // Giá trị mặc định là 0 (chờ phê duyệt)
-        ]);
-            // Gửi mail tới người đăng ký
-        try {
-            Mail::to($user->email)->send(new \App\Mail\VerifyAccount($user));
-        } catch (\Exception $e) {
-            // Nếu gửi email thất bại, đặt status thành 3
-            $user->status = '3';
-
-            $user->save();
-            return redirect('/auth/register')->with('error', 'Đăng ký thất bại! Không thể gửi email xác nhận. Tài khoản có thể bị khóa hoặc không tồn tại.');
+        if ($result) {
+            return to_route('auth.login')->with('success', 'Đăng ký thành công! Vui lòng xác nhận tài khoản trước khi đăng nhập');
+        } else {
+            return to_route('auth.register')->with('error', 'Đăng ký thất bại! Không thể gửi email xác nhận. Tài khoản có thể bị khóa hoặc không tồn tại.');
         }
-
-        return redirect('/auth/login')->with('success', 'Đăng ký thành công! Vui lòng xác nhận tài khoản trước khi đăng nhập');
-
     }
 
-    //Xử lý với nút xác thực tài khoản
-        public function verify($email)
+    public function verify($email)
     {
-        $user = User::where('email', $email)->first();
+        $result = $this->authService->verifyAccount($email);
 
-        if (!$user) {
-            // Không tìm thấy người dùng, có thể xử lý thông báo lỗi hoặc chuyển hướng.
+        if ($result) {
+            return to_route('auth.login')->with('success', 'Xác nhận tài khoản thành công! Bạn có thể đăng nhập ngay bây giờ.');
+        } else {
             return redirect('/')->with('error', 'Không tìm thấy người dùng.');
         }
-
-        // Cập nhật trạng thái tùy thuộc vào giá trị status
-        $user->status = '1';
-        $user->save();
-
-
-        return redirect('/auth/login')->with('success', 'Xác nhận tài khoản thành công! Bạn có thể đăng nhập ngay bây giờ.');
     }
+
     public function noverify($email)
     {
-        $user = User::where('email', $email)->first();
+        $result = $this->authService->rejectVerification($email);
 
-        if (!$user) {
-            // Không tìm thấy người dùng, có thể xử lý thông báo lỗi hoặc chuyển hướng.
+        if ($result) {
+            return to_route('auth.register')->with('success', 'Từ chối xác thực thành công.');
+        } else {
+            return redirect('/')->with('error', 'Không tìm thấy người dùng.');
+        }
+    }
+
+    public function login(Request $request)
+    {
+        $result = $this->authService->loginUser($request);
+
+        if ($result) {
+            return to_route('listpost', ['user' => Auth::user()])->with('success', 'Đăng nhập thành công');
+        } else {
+            return to_route('auth.login')->with('error', 'Đăng nhập thất bại');
+        }
+    }
+
+    public function forgotPassword()
+    {
+        return view('auth.forgotPass');
+    }
+
+    public function postForgotPassword(EmailRequest $request)
+    {
+        $result = $this->authService->forgotPassword($request);
+
+        if ($result) {
+            return to_route('auth.login')->with('success', 'Vui lòng kiểm tra email để thực hiện thay đổi mật khẩu');
+        } else {
+            return back()->with('error', 'Email không tồn tại trong hệ thống');
+        }
+    }
+
+    public function getPassword($email)
+    {
+        $result = $this->authService->resetPasswordView($email);
+
+        if (!$result) {
             return redirect('/')->with('error', 'Không tìm thấy người dùng.');
         }
 
-        // Cập nhật trạng thái tùy thuộc vào giá trị status
-        $user->status = '2';
-        $user->save();
-
-          return redirect()->route('auth.register')->with('success', 'Từ chối xác thực thành công.');
+        return view('auth.getPassword', ['email' => $email]);
     }
-    public function login(Request $request)
-{
-    $email = $request->input('email');
-    $password = $request->input('password');
 
-    if (Auth::attempt(['email' => $email, 'password' => $password])) {
-        return redirect()->route('post', ['user' => Auth::user()])->with('success', 'Đăng nhập thành công');
+    public function getForgotPassword(PasswordRequest $request, $email)
+    {
+        $result = $this->authService->resetPassword($request, $email);
 
+        if ($result) {
+            return to_route('auth.login')->with('success', 'Đổi mật khẩu thành công, bạn có thể đăng nhập');
+        } else {
+            return redirect('/')->with('error', 'Không tìm thấy người dùng.');
         }
-
-         else{
-            return redirect()->route('auth.login')->with('error', 'Đăng nhập thất bại');
-         }
-}
-    public function forgotpasswword(){
-        return view('auth.forgotPass');
-    }
-    public function postforgotpassword(EmailRequest $request){
-            // Kiểm tra xem email đã tồn tại hay chưa
-            $existingUser = User::where('email', $request->input('email'))->first();
-
-            if (!$existingUser) {
-                // Email chưa tồn tại, tạo mới user
-                return back()->with('error', 'Email không tồn tại trong hệ thống');
-
-                // Thực hiện các công việc khác sau khi tạo user
-            } else {
-                Mail::to($existingUser->email)->send(new \App\Mail\MailForPassWord($existingUser));
-                return redirect()->route('auth.login')->with('success', 'Vui lòng kiểm tra email để thực hiện thay đổi mật khẩu');
-            }
-
-    }
-    public function getpasswword($email){
-
-
-            $user = User::where('email', $email)->first();
-
-            // Cập nhật trạng thái tùy thuộc vào giá trị status
-
-            return view('auth.getPassword', ['email' => $email]);
-
     }
 
-    public function getforgotpassword(PasswordRequest $request,$email){
-
-
-        $user = User::where('email', $email)->first();
-
-
-        // Cập nhật trạng thái tùy thuộc vào giá trị status
-        $user->update([
-
-            'password' => bcrypt($request->input('password')),
-
-        ]);
-        $user->save();
-        return redirect()->route('auth.login')->with('success', 'Đổi mật khẩu thành công,bạn có thể đăng nhập');
-
-}
-        public function editProfile()
-        {
-            // Lấy thông tin người dùng từ Auth hoặc từ model User
-            $user = Auth::user(); // Sử dụng Auth để lấy người dùng đã đăng nhập
-
-            return view('Post.updateprofile', compact('user'));
-        }
-
-        public function editedProfile(ProfileRequest $request)
+    public function editProfile()
     {
 
-        $user = Auth::user(); // Lấy thông tin người dùng từ Auth
+        // Lấy thông tin người dùng từ Auth hoặc từ model User
+        $user = Auth::user();
+        $result = $this->authService->editProfile($user);
 
-        $user->update([
-            'first_name' => $request->input('first_name'),
-            'last_name' => $request->input('last_name'),
-            'address' => $request->input('address'),
-        ]);
-
-        return redirect()->route('update_profile')->with('success', 'Hồ sơ đã được cập nhật thành công');
+        return view('post.update-profile', compact('user'));
     }
 
+    public function editedProfile(ProfileRequest $request)
+    {
+        $user = Auth::user();
+        $result = $this->authService->updateProfile($user, $request);
 
+        if ($result) {
+            return to_route('update_profile')->with('success', 'Hồ sơ đã được cập nhật thành công');
+        } else {
+            return back()->with('error', 'Cập nhật hồ sơ thất bại');
+        }
+    }
 }

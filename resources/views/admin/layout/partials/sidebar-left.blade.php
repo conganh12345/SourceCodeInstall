@@ -2,7 +2,10 @@
 <a href="index3.html" class="brand-link">
     <span class="brand-text font-weight-light">AdminLTE</span>
 </a>
-
+<a href="#" class="brand-link">
+    <img src="{{ asset('images/11/fifa-women-2015.jpg') }}" alt="AdminLTE Logo" class="brand-image img-circle elevation-3" >
+    <span class="brand-text font-weight-light">{{ auth()->user()->name }}</span>
+</a>
 <!-- Sidebar -->
 <div class="sidebar">
     <!-- Sidebar user panel (optional) -->
