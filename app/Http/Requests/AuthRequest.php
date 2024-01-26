@@ -3,6 +3,9 @@
 namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Support\Facades\Password;
+use Illuminate\Validation\Rules\Password as PasswordRule;
+
 
 class AuthRequest extends FormRequest
 {
@@ -22,50 +25,54 @@ class AuthRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'first_name' => 'required|string|max:30',
-            'last_name' => 'required|string|max:30',
-            'email' => [
-                'required',
-                'string',
-                'email',
-                'max:100',
-                'unique:users',
-                'regex:/^[a-zA-Z0-9._%+-]+@gmail\.com$/i', // Kiểm tra email có phải là Gmail hay không
-            ],
-            'password' => [
-                'required',
-                'string',
-                'min:8',
-                'regex:/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]+$/',
-            ],
-            'confirmpassword' => [
-                'required',
-                'same:password',
-            ],
+                'first_name' => 'required|string|max:30',
+                'last_name' => 'required|string|max:30',
+                'email' => [
+                    'required',
+                    'string',
+                    'email',
+                    'max:100',
+                    'unique:users',
+                    'ends_with:@gmail.com', // Kiểm tra email có kết thúc bằng "@gmail.com"
+                ],
+                'password' => [
+                    'required',
+                    'string',
+                    PasswordRule::min(8)
+                            ->mixedCase()
+                            ->letters()
+                            ->numbers()
+                            ->symbols(),   // Chứa cả chữ cái in hoa và chữ cái thường
+                ],
+                'confirmpassword' => [
+                    'required',
+                    'same:password',
+                ],
         ];
     }
 
     public function messages()
     {
         return [
-            'first_name.required' => 'Trường :attribute bắt buộc phải nhập.',
+            'first_name.required' => 'Trường :attribute là bắt buộc.',
             'first_name.max' => 'Trường :attribute không được vượt quá :max ký tự.',
 
-            'last_name.required' => 'Trường :attribute bắt buộc phải nhập.',
+            'last_name.required' => 'Trường :attribute là bắt buộc.',
             'last_name.max' => 'Trường :attribute không được vượt quá :max ký tự.',
 
-            'email.required' => 'Trường :attribute bắt buộc phải nhập.',
+            'email.required' => 'Trường :attribute là bắt buộc.',
             'email.email' => 'Trường :attribute không đúng định dạng email.',
             'email.max' => 'Trường :attribute không được vượt quá :max ký tự.',
             'email.unique' => 'Trường :attribute đã tồn tại trong hệ thống.',
-            'email.regex' => 'Trường :attribute phải là địa chỉ email của Gmail.',
+            'email.ends_with' => 'Trường :attribute phải là địa chỉ email của Gmail.',
 
-            'password.required' => 'Trường :attribute bắt buộc phải nhập.',
+            'password.required' => 'Trường :attribute là bắt buộc.',
             'password.min' => 'Trường :attribute phải có ít nhất :min ký tự.',
-            'password.regex' => 'Trường :attribute phải chứa ít nhất một ký tự thường, một ký tự hoa, một số, và một ký tự đặc biệt.',
+            'password.strong' => 'Trường :attribute phải chứa ít nhất một chữ cái thường, một chữ cái hoa, một số và một ký tự đặc biệt.',
 
-            'confirmpassword.required' => 'Trường :attribute bắt buộc phải nhập.',
+            'confirmpassword.required' => 'Trường :attribute là bắt buộc.',
             'confirmpassword.same' => 'Trường :attribute phải giống với mật khẩu.',
+
         ];
     }
 

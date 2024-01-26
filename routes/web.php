@@ -5,6 +5,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\PostController;
 use App\Http\Controllers\AuthController;
 use App\Http\Middleware\CheckLogin;
+use App\Services\AuthService;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -18,8 +19,7 @@ use App\Http\Middleware\CheckLogin;
 
 //Hiện trên ở giữa màn hình
 
-//Sử dụng Accessor để tạo attribute name từ first_name và last_name, có thể gọi $user->name
-Route::get('user/{userId}', [AuthController::class, 'showUserName']);
+
 //Test gửi mail qua Mailtrap
 Route::get('testmail',function(){
     $name = "Các bạn";
@@ -30,32 +30,29 @@ Route::get('testmail',function(){
 Route::group(['prefix' => 'auth'], function () {
     // Form đăng ký
     Route::get('/register', [AuthController::class, 'showFormRegister'])->name('auth.register');
-
     Route::get('/verify-account/{email}', [AuthController::class, 'verify']);
     Route::get('/noverify-account/{email}', [AuthController::class, 'noverify']);
     Route::post('/register', [AuthController::class, 'register']);
-
     // Form đăng nhập
-    Route::get('/login', [AuthController::class, 'showFormlogin'])->name('auth.login');
+    Route::get('/login', [AuthController::class, 'showFormLogin'])->name('auth.login');
     Route::post('/login', [AuthController::class, 'login']);
-
-    Route::get('/forgot-password', [AuthController::class, 'forgotpasswword'])->name('auth.forgotpass');
-    Route::post('/forgot-password', [AuthController::class, 'postforgotpassword']);
-    Route::get('/get-password/{email}', [AuthController::class, 'getpasswword'])->name('auth.getpass');
-    Route::post('/get-password/{email}', [AuthController::class, 'getforgotpassword']);
+    Route::get('/forgot-password', [AuthController::class, 'forgotPassword'])->name('auth.forgotpass');
+    Route::post('/forgot-password', [AuthController::class, 'postForgotPassword']);
+    Route::get('/get-password/{email}', [AuthController::class, 'getPassword'])->name('auth.getpass');
+    Route::post('/get-password/{email}', [AuthController::class, 'getForgotPassword']);
 
 });
 Route::group(['prefix' => 'auth'], function () {
-    Route::view('/post','post')->middleware('admin')->name('post');
+    Route::view('/post','admin.layout.layout')->name('post');
     Route::view('/home','home')->name('home');
-    Route::get('/listpost',[PostController::class, 'index'])->name('listpost');
-    Route::post('/delete_post',[PostController::class, 'destroy'])->name('delete_post');
-    Route::get('/delete_allpost',[PostController::class, 'destroyAll'])->name('delete_allpost');
-    Route::get('/add_post',[PostController::class, 'create'])->name('add_post');
-    Route::get('/edit_post',[PostController::class, 'showedit'])->name('edit_post');
-    Route::get('/show_post',[PostController::class, 'showpost'])->name('show_post');
-    Route::get('/updateprofile',[AuthController::class, 'editProfile'])->name('update_profile');
-    Route::post('/updateprofile',[AuthController::class, 'editedProfile']);
-
+    Route::get('/list-post',[PostController::class, 'index'])->middleware('admin')->name('listpost');
+    Route::post('/delete-post',[PostController::class, 'destroy'])->name('delete_post');
+    Route::get('/delete-allpost',[PostController::class, 'destroyAll'])->name('delete_allpost');
+    Route::get('/add-post',[PostController::class, 'create'])->name('add_post');
+    Route::get('/edit-post',[PostController::class, 'showedit'])->name('edit_post');
+    Route::get('/show-post',[PostController::class, 'showpost'])->name('show_post');
+    Route::get('/update-profile',[AuthController::class, 'editProfile'])->name('update_profile');
+    Route::post('/update-profile',[AuthController::class, 'editedProfile']);
+    Route::post('/add-post',[PostController::class, 'store'])->name('add_post_');
     Route::get('/logout',[AuthController::class, 'logout'])->name('logout');
 });

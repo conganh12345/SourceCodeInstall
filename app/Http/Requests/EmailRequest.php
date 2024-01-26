@@ -29,7 +29,7 @@ class EmailRequest extends FormRequest
                 'email',
                 'max:100',
 
-                'regex:/^[a-zA-Z0-9._%+-]+@gmail\.com$/i', // Kiểm tra email có phải là Gmail hay không
+                'ends_with:@gmail.com', // Kiểm tra email có kết thúc bằng "@gmail.com"
             ],
 
         ];
@@ -40,11 +40,11 @@ class EmailRequest extends FormRequest
         return [
 
 
-            'email.required' => 'Trường :attribute bắt buộc phải nhập.',
+            'email.required' => 'Trường :attribute là bắt buộc.',
             'email.email' => 'Trường :attribute không đúng định dạng email.',
             'email.max' => 'Trường :attribute không được vượt quá :max ký tự.',
 
-            'email.regex' => 'Trường :attribute phải là địa chỉ email của Gmail.',
+            'email.ends_with' => 'Trường :attribute phải là địa chỉ email của Gmail.',
 
 
         ];

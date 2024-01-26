@@ -16,10 +16,10 @@ return new class extends Migration
             $table->unsignedBigInteger('user_id');
             $table->string('title');
             $table->string('slug')->unique();
-            $table->text('description');
+            $table->text('description')->nullable();;
             $table->text('content');
             $table->string('thumbnail')->nullable();
-            $table->dateTime('publish_date');
+            $table->dateTime('publish_date')->nullable();;
             $table->enum('status', ['0', '1', '2'])->default('0');
             $table->timestamps();
             $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');

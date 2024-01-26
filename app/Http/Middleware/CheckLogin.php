@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Session;
+use App\Enums\UserStatus;
 class CheckLogin
 {
     /**
@@ -17,24 +18,36 @@ class CheckLogin
     public function handle(Request $request, Closure $next): Response
     {
 
-
         if (Auth::check()) {
             $user = Auth::user();
 
-            if ($user->status == '1') {
-                return $next($request);
-            } elseif ($user->status == '0') {
-                Auth::logout();
-                return redirect()->route('auth.login')->with('error', 'Tài khoản của bạn đang chờ xác nhận.');
-            } elseif ($user->status == '2') {
-                Auth::logout();
-                return redirect()->route('auth.login')->with('error', 'Tài khoản của bạn đã bị từ chối');
-            }elseif ($user->status == '3') {
-                Auth::logout();
-                return redirect()->route('auth.login')->with('error', 'Tài khoản của bạn đã bị khóa');
+            switch ($user->status) {
+                case UserStatus::PENDING:
+                    Auth::logout();
+                    return redirect()->route('auth.login')->with('error', 'Tài khoản của bạn đang chờ xác nhận.');
+                    break;
+
+                case UserStatus::REJECTED:
+                    Auth::logout();
+                    return redirect()->route('auth.login')->with('error', 'Tài khoản của bạn đã bị từ chối');
+                    break;
+
+                case UserStatus::LOCKED:
+                    Auth::logout();
+                    return redirect()->route('auth.login')->with('error', 'Tài khoản của bạn đã bị khóa');
+                    break;
+
+                case UserStatus::ACTIVE:
+                    return $next($request);
+                    break;
+
+                default:
+                    return back()->with('error', 'Email hoặc mật khẩu không đúng');
+                    break;
             }
-        } else {
-            return back()->with('error', 'Email hoặc mật khẩu không đúng');
-    }
+        }
+
+        return back()->with('error', 'Email hoặc mật khẩu không đúng');
+
 }
 }

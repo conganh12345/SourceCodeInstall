@@ -4,21 +4,25 @@ namespace App\Http\Controllers;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
 use App\Models\Post;
-
+use App\Models\User;
+use App\Services\PostService;
+use App\Http\Requests\AddpostRequest;
 class PostController extends Controller
 {
+    protected $postService;
+
+    public function __construct(PostService $postService)
+    {
+        $this->postService = $postService;
+    }
     /**
      * Display a listing of the resource.
      */
     public function index()
     {
-        // Lấy người dùng hiện tại
-        $user = Auth::user();
+        $posts = $this->postService->getUserPosts(Auth::user());
 
-        // Lấy tất cả bài viết của người dùng hiện tại sử dụng mối quan hệ đã định nghĩa
-        $posts = $user->posts()->paginate(1);
-
-        return view('Post.listpost', compact('posts'));
+        return view('post.index', compact('posts'));
     }
 
     /**
@@ -26,15 +30,21 @@ class PostController extends Controller
      */
     public function create()
     {
-        return view('Post.Addpost');
+        return view('post.create');
     }
 
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(AddpostRequest $request)
     {
-        //
+        $result = $this->postService->createPost(Auth::user(), $request);
+
+        if ($result) {
+            return to_route('listpost')->with('success', 'Tạo bài viết mới thành công');
+        }
+
+        return to_route('listpost')->with('error', 'Không thể tạo bài viết');
     }
 
     /**
@@ -67,29 +77,27 @@ class PostController extends Controller
     //Xóa post cụ thể
     public function destroy(Request $request)
     {
-        $post = Post::find($request->posts_delete_id);
-        $post->delete();
+        $result = $this->postService->deletePost($request->posts_delete_id);
 
-        return redirect()->route('listpost')->with('success','Xóa bài viết thành công');
+        if ($result) {
+            return to_route('listpost')->with('success', 'Xóa bài viết thành công');
+        }
+
+        return to_route('listpost')->with('error', 'Không thể xóa bài viết');
     }
 
-    //Xóa tất cả post
     public function destroyAll()
     {
-        // Lấy người dùng hiện tại
-        $user = Auth::user();
+        $this->postService->deleteAllPosts(Auth::user());
 
-        // Xóa tất cả bài viết của người dùng hiện tại sử dụng mối quan hệ
-        $user->posts()->delete();
-
-        return redirect()->route('listpost')->with('success', 'Xóa tất cả bài viết thành công');
+        return to_route('listpost')->with('success', 'Xóa tất cả bài viết thành công');
     }
     public function showedit()
     {
-        return view('Post.Editpost');
+        return view('post.edit');
     }
     public function showpost()
     {
-        return view('Post.Showpost');
+        return view('post.article-details');
     }
 }
