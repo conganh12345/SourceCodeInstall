@@ -7,6 +7,7 @@ use App\Models\Post;
 use App\Models\User;
 use App\Services\PostService;
 use App\Http\Requests\AddpostRequest;
+use App\Http\Requests\EditPostRequest;
 class PostController extends Controller
 {
     protected $postService;
@@ -60,15 +61,19 @@ class PostController extends Controller
      */
     public function edit(string $id)
     {
+        $post = $this->postService->editPost($id);
 
+        return view('post.edit', compact('post'));
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    public function update(EditPostRequest $request, string $id)
     {
-        //
+        $post = $this->postService->updatePost($id, $request);
+
+        return to_route('listpost')->with('success', 'Cập nhật bài viết thành công');
     }
 
     /**
@@ -92,10 +97,7 @@ class PostController extends Controller
 
         return to_route('listpost')->with('success', 'Xóa tất cả bài viết thành công');
     }
-    public function showedit()
-    {
-        return view('post.edit');
-    }
+
     public function showpost()
     {
         return view('post.article-details');

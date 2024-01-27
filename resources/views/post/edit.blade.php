@@ -10,51 +10,50 @@
             </div>
             <!-- /.card-header -->
             <!-- form start -->
-            <form method="POST" action="#" enctype="multipart/form-data">
+            <form method="POST" action="{{ route('edit_post_', $post->id) }}" enctype="multipart/form-data">
                 @csrf <!-- Thêm CSRF Token -->
 
                 <div class="card-body">
                     <div class="form-group">
                         <label for="title">Title</label>
-                        <input type="text" class="form-control" id="title" name="title" placeholder="Enter title" value="{{ old('title') }}">
+                        <input type="text" class="form-control" id="title" name="title" placeholder="Enter title" value="{{ $post->title }}">
                         @error('title')
                         <span style="color: red">{{ $message }}</span>
                         @enderror
                     </div>
                     <div class="form-group">
                         <label for="slug">Slug</label>
-                        <input type="text" class="form-control" id="slug" name="slug" placeholder="Enter slug" value="{{ old('slug') }}">
+                        <input type="text" class="form-control" id="slug" name="slug" placeholder="Enter slug" value="{{ $post->slug }}">
                         @error('slug')
                         <span style="color: red">{{ $message }}</span>
                         @enderror
                     </div>
                     <div class="form-group">
                         <label for="description">Description</label>
-                        <textarea class="form-control" id="description" name="description" placeholder="Enter description">{{ old('description') }}</textarea>
+                        <textarea class="form-control" id="description" name="description" placeholder="Enter description">{{ $post->description }}</textarea>
                         @error('description')
                         <span style="color: red">{{ $message }}</span>
                         @enderror
                     </div>
                     <div class="form-group">
                         <label for="content">Content</label>
-                        <textarea class="form-control" id="content" name="content" placeholder="Enter content">{{ old('content') }}</textarea>
+                        <textarea class="form-control" id="content" name="content" placeholder="Enter content">{{ $post->content }}</textarea>
                         @error('content')
                         <span style="color: red">{{ $message }}</span>
                         @enderror
                     </div>
                     <div class="form-group">
                         <label for="publish_date">Publish Date</label>
-                        <input type="date" class="form-control" id="publish_date" name="publish_date" value="{{ old('publish_date') }}">
+                        <input type="date" class="form-control" id="publish_date" name="publish_date" value="{{  $post->publish_date }}">
                         @error('publish_date')
-                        <span style="color: red">{{ $message }}</span>
+                            <span style="color: red">{{ $message }}</span>
                         @enderror
                     </div>
 
+
                     <div class="form-group">
                         <label for="status">Status</label>
-                        <div class="form-control" id="status" name="status">
-                            0
-                        </div>
+                        <input type="text" class="form-control" id="status" name="status" value="{{ $post->status }}">
                         @error('status')
                         <span style="color: red">{{ $message }}</span>
                         @enderror
@@ -64,7 +63,7 @@
                         <label for="fileInput">Thumbnail</label>
                         <div class="input-group">
                             <div class="custom-file">
-                                <input type="file" class="custom-file-input" id="fileInput" name="thumbnail" onchange="displayFileName()">
+                                <input type="file" class="custom-file-input" id="fileInput" name="thumbnail" onchange="displayFileName(this)">
                                 <label class="custom-file-label" for="fileInput" id="fileInputLabel">Choose file</label>
                             </div>
                             <div class="input-group-append">
@@ -105,4 +104,14 @@
             });
         });
     </script>
+    <script>
+        function displayFileName(input) {
+            // Lấy tệp tin đã chọn
+            var fileName = input.files[0].name;
+
+            // Hiển thị đường dẫn tệp tin trong label
+            var label = document.getElementById('fileInputLabel');
+            label.textContent = fileName;
+        }
+        </script>
 @endsection

@@ -88,7 +88,7 @@
                                                     <button onclick="window.location='{{ route('show_post') }}';" class="btn btn-info btn-sm" style="margin-right: 10px;"><i class="fas fa-eye"></i></button>
 
                                                     <!-- Button edit -->
-                                                    <button onclick="window.location='{{ route('edit_post') }}';" class="btn btn-warning btn-sm" style="margin-right: 10px;"><i class="fas fa-edit"></i></button>
+                                                    <button onclick="window.location='{{ route('edit_post', $post->id) }}';" class="btn btn-warning btn-sm" style="margin-right: 10px;"><i class="fas fa-edit"></i></button>
 
                                                     <!-- Button delete -->
                                                     <button class="btn btn-danger btn-sm deletePost" value="{{$post->id}}"><i class="fas fa-trash"></i></button>

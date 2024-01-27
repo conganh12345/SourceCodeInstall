@@ -49,7 +49,8 @@ Route::group(['prefix' => 'auth'], function () {
     Route::post('/delete-post',[PostController::class, 'destroy'])->name('delete_post');
     Route::get('/delete-allpost',[PostController::class, 'destroyAll'])->name('delete_allpost');
     Route::get('/add-post',[PostController::class, 'create'])->name('add_post');
-    Route::get('/edit-post',[PostController::class, 'showedit'])->name('edit_post');
+    Route::get('/edit-post/{id}',[PostController::class, 'edit'])->name('edit_post');
+    Route::post('/edit-post/{id}',[PostController::class, 'update'])->name('edit_post_');
     Route::get('/show-post',[PostController::class, 'showpost'])->name('show_post');
     Route::get('/update-profile',[AuthController::class, 'editProfile'])->name('update_profile');
     Route::post('/update-profile',[AuthController::class, 'editedProfile']);
