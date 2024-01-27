@@ -64,7 +64,7 @@
                         <label for="fileInput">Thumbnail</label>
                         <div class="input-group">
                             <div class="custom-file">
-                                <input type="file" class="custom-file-input" id="fileInput" name="thumbnail" onchange="displayFileName()">
+                                <input type="file" class="custom-file-input" id="fileInput" name="thumbnail" onchange="displayFileName(this)">
                                 <label class="custom-file-label" for="fileInput" id="fileInputLabel">Choose file</label>
                             </div>
                             <div class="input-group-append">
@@ -104,5 +104,15 @@
                 $('#slug').val(slug);
             });
         });
+    </script>
+<script>
+    function displayFileName(input) {
+        // Lấy tên tệp tin đã chọn
+        var fileName = input.files[0].name;
+
+        // Hiển thị đường dẫn tệp tin trong label
+        var label = document.getElementById('fileInputLabel');
+        label.textContent = fileName;
+    }
     </script>
 @endsection

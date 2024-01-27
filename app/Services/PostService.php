@@ -57,4 +57,36 @@ class PostService
     {
         $user->posts()->delete();
     }
+
+    public function editPost(string $id)
+{
+    $post = Post::find($id);
+
+    return $post;
+}
+
+public function updatePost(string $id, $requestData)
+{
+    $post = Post::find($id);
+
+    if (!$post) {
+        abort(404);
+    }
+
+    $post->title = $requestData->input('title');
+    $post->slug = $requestData->input('slug');
+    $post->description = $requestData->input('description');
+    $post->content = $requestData->input('content');
+    $post->publish_date = $requestData->input('publish_date');
+    $post->status = $requestData->input('status');
+
+    if ($requestData->hasFile('thumbnail')) {
+        $thumbnailFile = $requestData->file('thumbnail');
+        $post->addMedia($thumbnailFile)->toMediaCollection();
+    }
+
+    $post->save();
+
+    return $post;
+}
 }
