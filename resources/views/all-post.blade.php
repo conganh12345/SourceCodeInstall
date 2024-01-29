@@ -31,13 +31,13 @@
         <div class="container-fluid">
             <div class="row mb-2">
                 <div class="col-sm-6">
-                    <h1>Danh sách bài viết</h1>
+                    <h1>Tin tức</h1>
                 </div>
                 <div class="col-sm-6 text-right">
                     <!-- Button to create a new post -->
                     <a href="{{route('add_post')}}" class="btn btn-success">Tạo mới</a>
                     <!-- Button to delete all posts (you may replace '#delete-all' with the actual route) -->
-                    <a href="{{route('delete_allpost')}}" class="btn btn-danger" id="delete-all">Xóa tất cả</a>
+
                 </div>
             </div>
         </div><!-- /.container-fluid -->
@@ -55,47 +55,28 @@
                         <!-- /.card-header -->
                         <div class="card-body">
                             <table class="table table-bordered">
-                                <thead>
-                                    <tr>
-                                        <th>Thumbnail</th>
-                                        <th>Title</th>
-                                        <th>Description</th>
-                                        <th>Publish Date</th>
-                                        <th>Status</th>
-                                        <th>Action</th>
-                                    </tr>
-                                </thead>
+
                                 <tbody>
-                                    <!-- Duyệt qua danh sách bài viết và hiển thị thông tin -->
-                                    @foreach($posts as $post)
-                                        <tr>
-                                            <td>
-                                                @if($post->thumbnail)
-                                                <img src="{{ asset($post->thumbnail) }}" alt="Thumbnail" style="max-width: 70px; max-height: 100px; width: auto; height: auto;">
-
-                                            @else
-                                                <p>No thumbnail available</p>
-                                            @endif
-
-                                            </td>
-                                            <td>{{ $post->title }}</td>
-                                            <td>{{ $post->description }}</td>
-                                            <td>{{ $post->publish_date }}</td>
-                                            <td>{{ $post->status }}</td>
-                                            <td>
-                                                <!-- Icon show -->
-                                   <!-- Button show -->
-                                                    <button onclick="window.location='{{ route('show_post', $post->id) }}';" class="btn btn-info btn-sm" style="margin-right: 10px;"><i class="fas fa-eye"></i></button>
-
-                                                    <!-- Button edit -->
-                                                    <button onclick="window.location='{{ route('edit_post', $post->id) }}';" class="btn btn-warning btn-sm" style="margin-right: 10px;"><i class="fas fa-edit"></i></button>
-
-                                                    <!-- Button delete -->
-                                                    <button class="btn btn-danger btn-sm deletePost" value="{{$post->id}}"><i class="fas fa-trash"></i></button>
-
-                                            </td>
-                                        </tr>
-                                    @endforeach
+                                    <div class="row">
+                                        @foreach($posts as $post)
+                                            <div class="col-md-4">
+                                                <div class="card">
+                                                    @if($post->thumbnail)
+                                                        <img src="{{ asset($post->thumbnail) }}" class="card-img-top" alt="Thumbnail">
+                                                    @else
+                                                        <div class="card-img-top" style="height: 150px; background-color: #ddd;"></div>
+                                                    @endif
+                                                    <div class="card-body">
+                                                        <h5 class="card-title">
+                                                            <a href="{{ route('news_details', $post->slug) }}">{{ $post->title }}</a>
+                                                        </h5>
+                                                        <p class="card-text">{{ $post->publish_date }}</p>
+                                                        <p class="card-text">{{ $post->description }}</p>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        @endforeach
+                                    </div>
 
                                 </tbody>
 
@@ -103,11 +84,7 @@
 
                         </div>
                         <!-- /.card-body -->
-                        <div class="card-footer clearfix">
-                            <ul class="pagination pagination-sm m-0 float-right">
-                                {{ $posts->links() }}
-                            </ul>
-                        </div>
+
                     </div>
                     <!-- /.card -->
                 </div>

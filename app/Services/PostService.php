@@ -58,8 +58,9 @@ class PostService
         $user->posts()->delete();
     }
 
-    public function editPost(string $id)
+    public function getPostById(string $id)
 {
+
     $post = Post::find($id);
 
     return $post;
@@ -89,4 +90,25 @@ public function updatePost(string $id, $requestData)
 
     return $post;
 }
+
+public function showArticleDetails()
+    {
+
+    $statusActive = '1'; // Thay thế 'active' bằng giá trị ENUM thật của bạn
+    $posts = Post::where('status', $statusActive)->get();
+
+    return $this->transformPosts($posts);
+
+    }
+    public function showNewsDetails($slug)
+    {
+
+        $statusActive = '1'; // Replace '1' with the actual ENUM value
+        $post = Post::where('slug', $slug)
+                     ->where('status', $statusActive)
+                     ->first();
+
+        return $this->transformPosts($post);
+
+    }
 }
