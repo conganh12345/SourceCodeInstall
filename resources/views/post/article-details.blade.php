@@ -10,9 +10,9 @@
             </div>
             <!-- /.card-header -->
             <div class="card-body">
-                {{-- <h2>{{ $post->title }}</h2>
+                <h2>{{ $post->title }}</h2>
                 <p>{{ $post->description }}</p>
-                <p>{{ $post->content }}</p> --}}
+                <p>{!! $post->content !!}</p>
             </div>
             <!-- /.card-body -->
         </div>

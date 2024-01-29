@@ -49,11 +49,13 @@ Route::group(['prefix' => 'auth'], function () {
     Route::post('/delete-post',[PostController::class, 'destroy'])->name('delete_post');
     Route::get('/delete-allpost',[PostController::class, 'destroyAll'])->name('delete_allpost');
     Route::get('/add-post',[PostController::class, 'create'])->name('add_post');
+    Route::post('/add-post',[PostController::class, 'store'])->name('add_post_');
     Route::get('/edit-post/{id}',[PostController::class, 'edit'])->name('edit_post');
     Route::post('/edit-post/{id}',[PostController::class, 'update'])->name('edit_post_');
-    Route::get('/show-post',[PostController::class, 'showpost'])->name('show_post');
+    Route::get('/show-post/{id}',[PostController::class, 'show'])->name('show_post');
     Route::get('/update-profile',[AuthController::class, 'editProfile'])->name('update_profile');
     Route::post('/update-profile',[AuthController::class, 'editedProfile']);
-    Route::post('/add-post',[PostController::class, 'store'])->name('add_post_');
     Route::get('/logout',[AuthController::class, 'logout'])->name('logout');
+    Route::get('/show-article-details',[PostController::class, 'articleDetails'])->name('article_details');
+    Route::get('/show-news-details/{slug}',[PostController::class, 'newsDetails'])->name('news_details');
 });

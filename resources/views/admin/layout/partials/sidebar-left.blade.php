@@ -20,6 +20,12 @@
                 </a>
             </li>
             <li class="nav-item">
+                <a href="{{ route('article_details') }}" class="nav-link" id="listpost-link">
+                    <i class="far fa-circle nav-icon"></i>
+                    <p>Xem tin tức</p>
+                </a>
+            </li>
+            <li class="nav-item">
                 <a href="{{ route('listpost') }}" class="nav-link" id="listpost-link">
                     <i class="far fa-circle nav-icon"></i>
                     <p>Xem danh sách bài viết</p>

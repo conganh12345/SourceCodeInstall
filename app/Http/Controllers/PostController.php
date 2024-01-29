@@ -53,7 +53,10 @@ class PostController extends Controller
      */
     public function show(string $id)
     {
-        //
+        $post = $this->postService->getPostById($id);
+
+        return view('post.article-details', compact('post'));
+
     }
 
     /**
@@ -61,7 +64,7 @@ class PostController extends Controller
      */
     public function edit(string $id)
     {
-        $post = $this->postService->editPost($id);
+        $post = $this->postService->getPostById($id);
 
         return view('post.edit', compact('post'));
     }
@@ -98,8 +101,17 @@ class PostController extends Controller
         return to_route('listpost')->with('success', 'Xóa tất cả bài viết thành công');
     }
 
-    public function showpost()
+    public function articleDetails()
     {
-        return view('post.article-details');
+        $posts = $this->postService->showArticleDetails();
+
+        return view('all-post', compact('posts'));
     }
+    public function newsDetails($slug)
+    {
+        $post = $this->postService->showNewsDetails($slug);
+
+        return view('post.article-details', compact('post'));
+    }
+
 }
