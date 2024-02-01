@@ -20,9 +20,16 @@
         <div class="container-fluid">
             <div class="row mb-3">
                 <div class="col-md-6">
-                    <form action="#" method="GET">
+                    <form action="{{ route('searchUser') }}" method="GET">
                         <div class="input-group">
-                            <input type="text" name="search" class="form-control" placeholder="Tìm kiếm người dùng">
+                            <input type="text" name="search" class="form-control" placeholder="Tìm kiếm tài khoản">
+
+                            <!-- Thêm một dropdown để chọn loại tìm kiếm -->
+                            <select name="search_type" class="form-control">
+                                <option value="name">Theo tên</option>
+                                <option value="email">Theo email</option>
+                            </select>
+
                             <button type="submit" class="btn btn-primary">Tìm kiếm</button>
                         </div>
                     </form>
@@ -48,9 +55,9 @@
                                 </thead>
                                 <tbody>
                                     <!-- Duyệt qua danh sách người dùng và hiển thị thông tin -->
-                                    {{-- @foreach($users as $user)
+                                    @foreach($users as $user)
                                         <tr>
-                                            <td>{{ $user->first_name . ' ' . $user->last_name }}</td>
+                                            <td>{{ $user->name }}</td>
                                             <td>{{ $user->email }}</td>
                                             <td>{{ $user->address }}</td>
                                             <td>{{ $user->status }}</td>
@@ -59,7 +66,7 @@
                                                 <a href="{{ route('edit_user', $user->id) }}" class="btn btn-warning btn-sm" style="margin-right: 10px;">Edit</a>
                                             </td>
                                         </tr>
-                                    @endforeach --}}
+                                    @endforeach
                                 </tbody>
                             </table>
                         </div>

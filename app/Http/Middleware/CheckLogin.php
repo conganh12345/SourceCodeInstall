@@ -24,17 +24,17 @@ class CheckLogin
             switch ($user->status) {
                 case UserStatus::PENDING:
                     Auth::logout();
-                    return redirect()->route('auth.login')->with('error', 'Tài khoản của bạn đang chờ xác nhận.');
+                    return to_route('auth.login')->with('error', 'Tài khoản của bạn đang chờ xác nhận.');
                     break;
 
                 case UserStatus::REJECTED:
                     Auth::logout();
-                    return redirect()->route('auth.login')->with('error', 'Tài khoản của bạn đã bị từ chối');
+                    return to_route('auth.login')->with('error', 'Tài khoản của bạn đã bị từ chối');
                     break;
 
                 case UserStatus::LOCKED:
                     Auth::logout();
-                    return redirect()->route('auth.login')->with('error', 'Tài khoản của bạn đã bị khóa');
+                    return to_route('auth.login')->with('error', 'Tài khoản của bạn đã bị khóa');
                     break;
 
                 case UserStatus::ACTIVE:
