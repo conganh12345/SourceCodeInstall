@@ -4,27 +4,7 @@
 @section('title', 'Danh sách bài viết')
 
 @section('contents')
-<!-- Popup xác nhận xóa (Modal) -->
-<div class="modal fade" id="deleteModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-    <div class="modal-dialog">
-      <div class="modal-content">
-        <form action="{{ route('delete_post') }}" method="POST">
-            @csrf
-                    <div class="modal-header">
-                    <h3 class="modal-title fs-5" id="exampleModalLabel">Xóa bài viết</h3>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                    </div>
-                    <div class="modal-body">
-                        <input type="hidden" name="posts_delete_id" id="post_id">
-                    <h5>Bạn có chắc là muốn xóa bài viết này không?</h5>
-                    </div>
-                    <div class="modal-footer">
-                    <button type="submit" class="btn btn-primary">Xác nhận</button>
-                    </div>
-                </form>
-      </div>
-    </div>
-  </div>
+
 
     <!-- Content Header (Page header) -->
     <section class="content-header">
@@ -35,7 +15,7 @@
                 </div>
                 <div class="col-sm-6 text-right">
                     <!-- Button to create a new post -->
-                    <a href="{{route('add_post')}}" class="btn btn-success">Tạo mới</a>
+                    <a href="#" class="btn btn-success">Tạo mới</a>
                     <!-- Button to delete all posts (you may replace '#delete-all' with the actual route) -->
 
                 </div>

@@ -66,9 +66,8 @@ class Post extends Model implements HasMedia
             return $url;
         }
 
-        // Nếu không có media, trả về một hình ảnh mặc định hoặc null tùy thuộc vào yêu cầu của bạn
         return asset('path/to/default-thumbnail.jpg');
-        // Hoặc return null;
+
     }
 
 

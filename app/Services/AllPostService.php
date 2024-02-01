@@ -1,15 +1,17 @@
 <?php
-// app/services/PostService.php
+
 
 namespace App\Services;
 
 use App\Models\Post;
+use Illuminate\Support\Facades\Mail;
+use App\Jobs\SendEmailJob;
 
-class PostService
+class AllPostService
 {
-    public function getUserPosts($user, $perPage = 4)
+    public function getAllPosts($perPage = 4)
     {
-        $posts = $user->posts()->paginate($perPage);
+        $posts = Post::paginate($perPage);
 
         return $this->transformPosts($posts);
     }
@@ -26,7 +28,7 @@ class PostService
             'description' => $requestData->input('description'),
             'content' => $requestData->input('content'),
             'publish_date' => $requestData->input('publish_date') ?? null,
-            'status' => '0',
+            'status' => $requestData->input('status', '0'),
         ]);
 
         $user->posts()->save($post);
@@ -53,9 +55,9 @@ class PostService
         return false;
     }
 
-    public function deleteAllPosts($user)
+    public function deleteAllPosts()
     {
-        $user->posts()->delete();
+        Post::query()->delete();
     }
 
     public function getPostById(string $id)
@@ -73,6 +75,8 @@ public function updatePost(string $id, $requestData)
     if (!$post) {
         abort(404);
     }
+
+    $previousStatus = $post->status;
 
     $post->title = $requestData->input('title');
     $post->slug = $requestData->input('slug');
@@ -94,9 +98,26 @@ public function updatePost(string $id, $requestData)
 
     $post->save();
 
+
+    if ($previousStatus != $post->status) {
+        $this->sendPostStatusEmail($post);
+    }
+
     return $post;
 }
 
+private function sendPostStatusEmail($post)
+{
+    $data = [
+        'email' => $post->user->email,
+        'status' => $post->status,
+        'title' => $post->title,
+
+    ];
+
+    // Thực hiện công việc gửi email thông báo
+    dispatch(new SendEmailJob($data));
+}
 public function showArticleDetails()
     {
 
@@ -117,4 +138,22 @@ public function showArticleDetails()
         return $this->transformPosts($post);
 
     }
+
+    public function searchPosts($searchType, $searchValue)
+    {
+        $query = Post::query();
+
+        if ($searchType === 'email') {
+            $query->whereHas('user', function ($userQuery) use ($searchValue) {
+                $userQuery->where('email', 'like', '%' . $searchValue . '%');
+            });
+        }
+
+        if ($searchType === 'title') {
+            $query->where('title', 'like', '%' . $searchValue . '%');
+        }
+
+        return $query->get();
+    }
+
 }
