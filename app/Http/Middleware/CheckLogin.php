@@ -47,7 +47,7 @@ class CheckLogin
             }
         }
 
-        return back()->with('error', 'Email hoặc mật khẩu không đúng');
+        return back()->with('error', 'Vui lòng đăng nhập trước khi vào trang');
 
 }
 }

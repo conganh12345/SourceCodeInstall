@@ -13,6 +13,8 @@ use GuzzleHttp\Client;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Session;
+use Spatie\Permission\Models\Role;
+use Spatie\Permission\Models\Permission;
 
 class AuthController extends Controller
 {
@@ -32,6 +34,7 @@ class AuthController extends Controller
 
     public function showFormLogin()
     {
+
         return view('auth.login');
     }
 
@@ -47,9 +50,10 @@ class AuthController extends Controller
 
         if ($result) {
             return to_route('auth.login')->with('success', 'Đăng ký thành công! Vui lòng xác nhận tài khoản trước khi đăng nhập');
-        } else {
-            return to_route('auth.register')->with('error', 'Đăng ký thất bại! Không thể gửi email xác nhận. Tài khoản có thể bị khóa hoặc không tồn tại.');
         }
+
+        return to_route('auth.register')->with('error', 'Đăng ký thất bại! Không thể gửi email xác nhận. Tài khoản có thể bị khóa hoặc không tồn tại.');
+
     }
 
     public function verify($email)
@@ -58,9 +62,9 @@ class AuthController extends Controller
 
         if ($result) {
             return to_route('auth.login')->with('success', 'Xác nhận tài khoản thành công! Bạn có thể đăng nhập ngay bây giờ.');
-        } else {
-            return redirect('/')->with('error', 'Không tìm thấy người dùng.');
         }
+         return redirect('/')->with('error', 'Không tìm thấy người dùng.');
+
     }
 
     public function noverify($email)
@@ -69,9 +73,9 @@ class AuthController extends Controller
 
         if ($result) {
             return to_route('auth.register')->with('success', 'Từ chối xác thực thành công.');
-        } else {
-            return redirect('/')->with('error', 'Không tìm thấy người dùng.');
         }
+            return redirect('/')->with('error', 'Không tìm thấy người dùng.');
+
     }
 
     public function login(Request $request)
@@ -79,10 +83,10 @@ class AuthController extends Controller
         $result = $this->authService->loginUser($request);
 
         if ($result) {
-            return to_route('listpost', ['user' => Auth::user()])->with('success', 'Đăng nhập thành công');
-        } else {
-            return to_route('auth.login')->with('error', 'Đăng nhập thất bại');
+            return to_route('article_details')->with('success', 'Đăng nhập thành công');
         }
+            return to_route('auth.login')->with('error', 'Đăng nhập thất bại');
+
     }
 
     public function forgotPassword()
@@ -96,9 +100,9 @@ class AuthController extends Controller
 
         if ($result) {
             return to_route('auth.login')->with('success', 'Vui lòng kiểm tra email để thực hiện thay đổi mật khẩu');
-        } else {
-            return back()->with('error', 'Email không tồn tại trong hệ thống');
         }
+            return back()->with('error', 'Email không tồn tại trong hệ thống');
+
     }
 
     public function getPassword($email)
@@ -118,15 +122,14 @@ class AuthController extends Controller
 
         if ($result) {
             return to_route('auth.login')->with('success', 'Đổi mật khẩu thành công, bạn có thể đăng nhập');
-        } else {
-            return redirect('/')->with('error', 'Không tìm thấy người dùng.');
         }
+            return redirect('/')->with('error', 'Không tìm thấy người dùng.');
+
     }
 
     public function editProfile()
     {
 
-        // Lấy thông tin người dùng từ Auth hoặc từ model User
         $user = Auth::user();
         $result = $this->authService->editProfile($user);
 
@@ -140,8 +143,8 @@ class AuthController extends Controller
 
         if ($result) {
             return to_route('update_profile')->with('success', 'Hồ sơ đã được cập nhật thành công');
-        } else {
-            return back()->with('error', 'Cập nhật hồ sơ thất bại');
         }
+            return back()->with('error', 'Cập nhật hồ sơ thất bại');
+
     }
 }

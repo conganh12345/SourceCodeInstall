@@ -9,17 +9,18 @@ use Illuminate\Mail\Mailables\Content;
 use Illuminate\Mail\Mailables\Envelope;
 use Illuminate\Queue\SerializesModels;
 
-class MailForPassWord extends Mailable
+class SendMailStatus extends Mailable
 {
     use Queueable, SerializesModels;
 
     /**
      * Create a new message instance.
      */
-    public $account;
-    public function __construct($acc)
+    public $data;
+
+    public function __construct($data)
     {
-        $this->account = $acc;
+        $this->data = $data;
     }
 
     /**
@@ -28,7 +29,7 @@ class MailForPassWord extends Mailable
     public function envelope(): Envelope
     {
         return new Envelope(
-            subject: 'Lấy lại mật khẩu tài khoản',
+            subject: 'Chào bạn đăng bài',
         );
     }
 
@@ -38,7 +39,7 @@ class MailForPassWord extends Mailable
     public function content(): Content
     {
         return new Content(
-            view: 'mail.check-mail-forget',
+            view: 'mail.check-mail-status',
         );
     }
 

@@ -1,7 +1,7 @@
 @extends('admin.layout.layout')
 
 @section('title', 'Chi tiết bài viết')
-    
+
 @section('contents')
     <section class="content">
         <div class="card">

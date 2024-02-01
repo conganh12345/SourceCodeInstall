@@ -19,18 +19,36 @@
                     <p>Hồ sơ</p>
                 </a>
             </li>
+
             <li class="nav-item">
-                <a href="{{ route('article_details') }}" class="nav-link" id="listpost-link">
+                <a href="{{ route('article_details') }}" class="nav-link" id="aricle-link">
                     <i class="far fa-circle nav-icon"></i>
                     <p>Xem tin tức</p>
                 </a>
             </li>
+
+            @role('user')
             <li class="nav-item">
                 <a href="{{ route('listpost') }}" class="nav-link" id="listpost-link">
                     <i class="far fa-circle nav-icon"></i>
                     <p>Xem danh sách bài viết</p>
                 </a>
             </li>
+            @endrole
+            @role('admin')
+            <li class="nav-item">
+                <a href="{{ route('all-post-management') }}" class="nav-link" id="postMangement-link">
+                    <i class="far fa-circle nav-icon"></i>
+                    <p>Quản lý bài viết</p>
+                </a>
+            </li>
+            <li class="nav-item">
+                <a href="{{ route('all-user-management') }}" class="nav-link" id="userManagement-link">
+                    <i class="far fa-circle nav-icon"></i>
+                    <p>Quản lý tài khoản</p>
+                </a>
+            </li>
+            @endrole
             <li class="nav-item">
                 <a href="{{ route('logout') }}" class="nav-link" id="logout-link">
                     <i class="fas fa-sign-out-alt nav-icon"></i>
@@ -47,58 +65,53 @@
 
 <script>
 
-    // Lắng nghe sự kiện click trên mục menu và thêm class "active"
-    document.getElementById('update-profile-link').addEventListener('click', function () {
-        setActiveLink(this.id); // Đặt mục menu hiện tại thành "active"
-    });
+                // Lắng nghe sự kiện click trên tất cả các mục menu và thêm class "active"
+            document.querySelectorAll('.nav-link').forEach(function (item) {
+                item.addEventListener('click', function () {
+                    setActiveLink(this.id);
+                });
+            });
 
-    document.getElementById('listpost-link').addEventListener('click', function () {
-        setActiveLink(this.id);
-    });
+            // Hàm đặt mục menu hiện tại thành "active"
+            function setActiveLink(linkId) {
+                // Loại bỏ class "active" từ tất cả các mục menu
+                var menuItems = document.querySelectorAll('.nav-link');
+                menuItems.forEach(function (item) {
+                    item.classList.remove('active');
+                });
 
+                // Thêm class "active" cho mục menu hiện tại
+                document.getElementById(linkId).classList.add('active');
 
-
-
-    // Hàm đặt mục menu hiện tại thành "active"
-    function setActiveLink(linkId) {
-        // Loại bỏ class "active" từ tất cả các mục menu
-        var menuItems = document.querySelectorAll('.nav-link');
-        menuItems.forEach(function (item) {
-            item.classList.remove('active');
-        });
-
-        // Thêm class "active" cho mục menu hiện tại
-        document.getElementById(linkId).classList.add('active');
-
-        // Lưu trạng thái vào localStorage
-        localStorage.setItem('activeLink', linkId);
-    }
-
-    // Kiểm tra trạng thái khi trang được load lại
-    window.onload = function () {
-        var activeLink = localStorage.getItem('activeLink');
-        if (activeLink) {
-            setActiveLink(activeLink);
-        } else {
-            // Nếu không có mục menu nào được lưu, kiểm tra trang hiện tại và đặt mục menu phù hợp
-            var currentPath = window.location.pathname;
-            var defaultLink = findLinkByPath(currentPath);
-
-            if (defaultLink) {
-                setActiveLink(defaultLink.id);
+                // Lưu trạng thái vào localStorage
+                localStorage.setItem('activeLink', linkId);
             }
-        }
-    };
 
-    // Hàm tìm mục menu dựa trên đường dẫn URL
-    function findLinkByPath(path) {
-        var links = document.querySelectorAll('.nav-link');
-        for (var i = 0; i < links.length; i++) {
-            var href = links[i].getAttribute('href');
-            if (path.includes(href)) {
-                return links[i];
+            // Kiểm tra trạng thái khi trang được load lại
+            window.onload = function () {
+                var activeLink = localStorage.getItem('activeLink');
+                if (activeLink) {
+                    setActiveLink(activeLink);
+                } else {
+                    // Nếu không có mục menu nào được lưu, kiểm tra trang hiện tại và đặt mục menu phù hợp
+                    var currentPath = window.location.pathname;
+                    var defaultLink = findLinkByPath(currentPath);
+
+                    if (defaultLink) {
+                        setActiveLink(defaultLink.id);
+                    }
+                }
+            };
+
+            // Hàm tìm mục menu dựa trên đường dẫn URL
+            function findLinkByPath(path) {
+                var links = document.querySelectorAll('.nav-link');
+                for (var i = 0; i < links.length; i++) {
+                    var href = links[i].getAttribute('href');
+                    if (path.includes(href)) {
+                        return links[i];
+                    }
+                }
+                return null;
             }
-        }
-        return null;
-    }
 </script>

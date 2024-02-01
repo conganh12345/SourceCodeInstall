@@ -39,6 +39,7 @@ class PostController extends Controller
      */
     public function store(AddpostRequest $request)
     {
+
         $result = $this->postService->createPost(Auth::user(), $request);
 
         if ($result) {
@@ -74,6 +75,7 @@ class PostController extends Controller
      */
     public function update(EditPostRequest $request, string $id)
     {
+
         $post = $this->postService->updatePost($id, $request);
 
         return to_route('listpost')->with('success', 'Cập nhật bài viết thành công');

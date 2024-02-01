@@ -103,24 +103,7 @@
                                 </div>
                             </div>
                         </form>
-                        {{-- @if (session('success'))
-                    <script>
-                        toastr.options= {
-                            "progressBar" :true,
-                            "closebutton" :true,
-                        }
-                        toastr.success("{{ Session::get('success') }}");
-                    </script>
-                    @endif
-                    @if (session('error'))
-                    <script>
-                        toastr.options= {
-                            "progressBar" :true,
-                            "closebutton" :true,
-                        }
-                        toastr.error("{{ Session::get('error') }}");
-                    </script>
-                    @endif --}}
+
                     </div>
                 </div>
             </div>
