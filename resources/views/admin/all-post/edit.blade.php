@@ -51,19 +51,13 @@
                     </div>
 
 
-                    {{-- <div class="form-group">
-                        <label for="status">Status</label>
-                        <input type="text" class="form-control" id="status" name="status" value="{{ $post->status }}">
-                        @error('status')
-                        <span style="color: red">{{ $message }}</span>
-                        @enderror
-                    </div> --}}
+
 
                     <div class="form-group">
                         <label for="status">Status</label>
                         <select class="form-control" id="status" name="status">
-                            <option value="0" {{ old('status') == '0' ? 'selected' : '' }}>0</option>
-                            <option value="1" {{ old('status') == '1' ? 'selected' : '' }}>1</option>
+                            <option value="0" {{ $post->status == '0' ? 'selected' : '' }}>0</option>
+                            <option value="1" {{ $post->status == '1' ? 'selected' : '' }}>1</option>
                         </select>
                         @error('status')
                             <span style="color: red">{{ $message }}</span>

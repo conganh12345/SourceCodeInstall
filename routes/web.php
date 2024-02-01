@@ -47,13 +47,17 @@ Route::group(['prefix' => 'auth'], function () {
 
 });
 Route::group(['prefix' => 'auth'], function () {
+
     Route::view('/post','admin.layout.layout')->name('post');
-    Route::view('/home','home')->name('home');
-    Route::get('/logout',[AuthController::class, 'logout'])->name('logout');
-    Route::get('/show-article-details',[PostController::class, 'articleDetails'])->name('article_details');
-    Route::get('/show-news-details/{slug}',[PostController::class, 'newsDetails'])->name('news_details');
-    Route::get('/update-profile',[AuthController::class, 'editProfile'])->name('update_profile');
-    Route::post('/update-profile',[AuthController::class, 'editedProfile']);
+
+        Route::middleware(['admin'])->group(function () {
+            Route::view('/home','home')->name('home');
+            Route::get('/logout',[AuthController::class, 'logout'])->name('logout');
+            Route::get('/show-article-details',[PostController::class, 'articleDetails'])->name('article_details');
+            Route::get('/show-news-details/{slug}',[PostController::class, 'newsDetails'])->name('news_details');
+            Route::get('/update-profile',[AuthController::class, 'editProfile'])->name('update_profile');
+            Route::post('/update-profile',[AuthController::class, 'editedProfile']);
+        });
 
         Route::group(['middleware' => ['admin','role:user']], function () {
             Route::get('/list-post',[PostController::class, 'index'])->name('listpost');
@@ -67,18 +71,23 @@ Route::group(['prefix' => 'auth'], function () {
 
 
         });
+
         Route::group(['middleware' => ['admin','role:admin']], function () {
             Route::get('/all-post-management',[AllPostController::class, 'index'])->name('all-post-management');
-            Route::get('/admin-add-post',[AllPostController::class, 'create'])->name('all_add_post');
-            Route::post('/admin-add-post',[AllPostController::class, 'store'])->name('all_add_post_');
-            Route::get('/admin-edit-post/{id}',[AllPostController::class, 'edit'])->name('all_ed it_post');
-            Route::post('/admin-edit-post/{id}',[AllPostController::class, 'update'])->name('all_edit_post_');
-            Route::post('/admin-delete-post',[AllPostController::class, 'destroy'])->name('all_delete_post');
-            Route::get('/admin-delete-allpost',[AllPostController::class, 'destroyAll'])->name('all_delete_allpost');
-            Route::get('/admin-show-post/{id}',[AllPostController::class, 'show'])->name('all_show_post');
-            Route::get('/admin-searchPost',[AllPostController::class, 'search'])->name('searchPost');
+            Route::get('/add-post',[AllPostController::class, 'create'])->name('all_add_post');
+            Route::post('/add-post',[AllPostController::class, 'store'])->name('all_add_post_');
+            Route::get('/edit-post/{id}',[AllPostController::class, 'edit'])->name('all_edit_post');
+            Route::post('/edit-post/{id}',[AllPostController::class, 'update'])->name('all_edit_post_');
+            Route::post('/delete-post',[AllPostController::class, 'destroy'])->name('all_delete_post');
+            Route::get('/delete-allpost',[AllPostController::class, 'destroyAll'])->name('all_delete_allpost');
+            Route::get('/show-post/{id}',[AllPostController::class, 'show'])->name('all_show_post');
+            Route::get('/searchPost',[AllPostController::class, 'search'])->name('searchPost');
+
             Route::get('/all-user-management',[AllUserController::class, 'index'])->name('all-user-management');
-    });
+            Route::get('/edit-user/{id}',[AllUserController::class, 'edit'])->name('edit_user');
+            Route::post('/edit-user/{id}',[AllUserController::class, 'update'])->name('edit_user_');
+            Route::get('/searchUser',[AllUserController::class, 'search'])->name('searchUser');
+        });
 });
 
 

@@ -3,17 +3,26 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Services\UserService;
 
 class AllUserController extends Controller
 {
+    protected $userService;
 
+    public function __construct(UserService $userService)
+    {
+        $this->userService = $userService;
+    }
     /**
      * Display a listing of the resource.
      */
+
     public function index()
     {
+        // Gọi hàm từ UserService để lấy tất cả users
+        $users = $this->userService->getAllUsers();
 
-        return view('admin.all-user.user-management');
+        return view('admin.all-user.index', compact('users'));
     }
 
     /**
@@ -45,7 +54,8 @@ class AllUserController extends Controller
      */
     public function edit(string $id)
     {
-        //
+        $user = $this->userService->getUserById($id);
+        return view('admin.all-user.edit', compact('user'));
     }
 
     /**
@@ -53,7 +63,9 @@ class AllUserController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        //
+        $user = $this->userService->updateUser($id, $request);
+
+        return to_route('all-user-management')->with('success', 'Cập nhật tài khoản thành công');
     }
 
     /**
@@ -63,4 +75,16 @@ class AllUserController extends Controller
     {
         //
     }
+
+    public function search(Request $request)
+{
+    $searchType = $request->input('search_type');
+    $searchValue = $request->input('search');
+
+    // Gọi phương thức tìm kiếm từ PostService
+    $users = $this->userService->searchUser($searchType, $searchValue);
+
+    // Trả về kết quả tìm kiếm vào view hoặc làm gì đó khác với kết quả
+    return view('admin.all-user.index', compact('users'));
+}
 }
