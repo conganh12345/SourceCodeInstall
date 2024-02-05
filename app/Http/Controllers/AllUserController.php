@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Services\UserService;
+use App\Models\User;
+
 
 class AllUserController extends Controller
 {
@@ -52,18 +54,18 @@ class AllUserController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(string $id)
+    public function edit(User $user)
     {
-        $user = $this->userService->getUserById($id);
+        // $user = $this->userService->getUserById($id);
         return view('admin.all-user.edit', compact('user'));
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    public function update(Request $request, User $user)
     {
-        $user = $this->userService->updateUser($id, $request);
+        $user = $this->userService->updateUser($user, $request);
 
         return to_route('admin.manageAllUsers')->with('success', 'Cập nhật tài khoản thành công');
     }

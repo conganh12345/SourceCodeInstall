@@ -21,9 +21,9 @@ class UserService
     return $user;
 }
 
-public function updateUser(string $id, $requestData)
+public function updateUser($user, $requestData)
 {
-            $user = User::find($id);
+            // $user = User::find($id);
 
             $user->first_name = $requestData->input('first_name');
             $user->last_name = $requestData->input('last_name');

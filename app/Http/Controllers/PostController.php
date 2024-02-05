@@ -65,9 +65,9 @@ class PostController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(string $id)
+    public function edit(Post $post)
     {
-        $post = $this->postService->getPostById($id);
+        // $post = $this->postService->getPostById($id);
 
         return view('post.edit', compact('post'));
     }
@@ -75,10 +75,10 @@ class PostController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(EditPostRequest $request, string $id)
+    public function update(EditPostRequest $request, Post $post)
     {
 
-        $post = $this->postService->updatePost($id, $request);
+        $post = $this->postService->updatePost($post, $request);
 
         return to_route('admin.listPosts')->with('success', 'Cập nhật bài viết thành công');
     }

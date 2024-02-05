@@ -57,8 +57,8 @@ Route::group(['prefix' => 'auth'], function () {
         Route::get('/delete-allpost',[PostController::class, 'destroyAll'])->name('admin.deleteUserPosts');
         Route::get('/add-post',[PostController::class, 'create'])->name('admin.createPost');
         Route::post('/add-post',[PostController::class, 'store'])->name('admin.storePost');
-        Route::get('/edit-post/{id}',[PostController::class, 'edit'])->name('admin.editPost');
-        Route::post('/edit-post/{id}',[PostController::class, 'update'])->name('admin.updatePost');
+        Route::get('/edit-post/{post}',[PostController::class, 'edit'])->name('admin.editPost');
+        Route::post('/edit-post/{post}',[PostController::class, 'update'])->name('admin.updatePost');
         Route::get('/show-post/{post}',[PostController::class, 'show'])->name('admin.showPost');
 
     });
@@ -69,16 +69,16 @@ Route::group(['prefix' => 'admin'], function () {
         Route::get('/all-post-management',[AllPostController::class, 'index'])->name('admin.manageAllPosts');
         Route::get('/add-post',[AllPostController::class, 'create'])->name('admin.createAllPost');
         Route::post('/add-post',[AllPostController::class, 'store'])->name('admin.storeAllPost');
-        Route::get('/edit-post/{id}',[AllPostController::class, 'edit'])->name('admin.editAllPost');
-        Route::post('/edit-post/{id}',[AllPostController::class, 'update'])->name('admin.updateAllPost');
+        Route::get('/edit-post/{post}',[AllPostController::class, 'edit'])->name('admin.editAllPost');
+        Route::post('/edit-post/{post}',[AllPostController::class, 'update'])->name('admin.updateAllPost');
         Route::post('/delete-post',[AllPostController::class, 'destroy'])->name('admin.deleteAllPost');
         Route::get('/delete-allpost',[AllPostController::class, 'destroyAll'])->name('admin.deleteAllPosts');
         Route::get('/show-post/{post}',[AllPostController::class, 'show'])->name('admin.showAllPost');
         Route::get('/searchPost',[AllPostController::class, 'search'])->name('searchPost');
 
         Route::get('/all-user-management',[AllUserController::class, 'index'])->name('admin.manageAllUsers');
-        Route::get('/edit-user/{id}',[AllUserController::class, 'edit'])->name('admin.editUser');
-        Route::post('/edit-user/{id}',[AllUserController::class, 'update'])->name('admin.updateUser');
+        Route::get('/edit-user/{user}',[AllUserController::class, 'edit'])->name('admin.editUser');
+        Route::post('/edit-user/{user}',[AllUserController::class, 'update'])->name('admin.updateUser');
         Route::get('/searchUser',[AllUserController::class, 'search'])->name('searchUser');
     });
 });

@@ -10,7 +10,7 @@
             </div>
             <!-- /.card-header -->
             <!-- form start -->
-            <form method="POST" action="{{route('admin.updateUser',$user->id)}}">
+            <form method="POST" action="{{route('admin.updateUser',$user)}}">
                 @csrf <!-- Thêm CSRF Token -->
 
                 <div class="card-body">

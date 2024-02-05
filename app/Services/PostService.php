@@ -66,9 +66,9 @@ class PostService
     return $post;
 }
 
-public function updatePost(string $id, $requestData)
+public function updatePost($post, $requestData)
 {
-    $post = Post::find($id);
+    // $post = Post::find($id);
 
     if (!$post) {
         abort(404);

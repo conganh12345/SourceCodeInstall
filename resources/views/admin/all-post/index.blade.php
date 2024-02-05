@@ -134,7 +134,7 @@
                                                 <button onclick="window.location='{{ route('admin.showAllPost', $post) }}';" class="btn btn-info btn-sm"><i class="fas fa-eye"></i></button>
 
                                                 <!-- Button edit -->
-                                                <button onclick="window.location='{{ route('admin.editAllPost', $post->id) }}';" class="btn btn-warning btn-sm"><i class="fas fa-edit"></i></button>
+                                                <button onclick="window.location='{{ route('admin.editAllPost', $post) }}';" class="btn btn-warning btn-sm"><i class="fas fa-edit"></i></button>
 
                                                 <!-- Button delete -->
                                                 <button class="btn btn-danger btn-sm deletePost" value="{{ $post->id }}"><i class="fas fa-trash"></i></button>

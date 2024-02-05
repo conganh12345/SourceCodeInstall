@@ -76,7 +76,7 @@
 
                                             <td>
                                                 <!-- Button edit -->
-                                                <a href="{{ route('admin.editUser', $user->id) }}" class="btn btn-warning btn-sm" style="margin-right: 10px;">Edit</a>
+                                                <a href="{{ route('admin.editUser', $user) }}" class="btn btn-warning btn-sm" style="margin-right: 10px;">Edit</a>
                                             </td>
                                         </tr>
                                     @endforeach
