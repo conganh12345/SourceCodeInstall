@@ -11,6 +11,10 @@ use App\Http\Requests\EmailRequest;
 use App\Http\Requests\PasswordRequest;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Mail;
+use App\Mail\VerifyAccount;
+
+use App\Mail\MailForPassWord;
+
 
 class AuthService
 {
@@ -25,44 +29,14 @@ class AuthService
             'status' => '0',
         ]);
 
-        try {
-            Mail::to($user->email)->send(new \App\Mail\VerifyAccount($user));
-        } catch (\Exception $e) {
-            $user->status = '3';
-            $user->save();
-            return false; // Thất bại
-        }
+
+        Mail::to($user->email)->send(new VerifyAccount($user));
+
 
         return true; // Thành công
     }
 
-    public function verifyAccount($email)
-    {
-        $user = User::where('email', $email)->first();
 
-        if (!$user) {
-            return false; // Thất bại
-        }
-
-        $user->status = '1';
-        $user->save();
-
-        return true; // Thành công
-    }
-
-    public function rejectVerification($email)
-    {
-        $user = User::where('email', $email)->first();
-
-        if (!$user) {
-            return false; // Thất bại
-        }
-
-        $user->status = '2';
-        $user->save();
-
-        return true; // Thành công
-    }
 
     public function loginUser($request)
     {
@@ -80,15 +54,8 @@ class AuthService
     {
         $existingUser = User::where('email', $request->input('email'))->first();
 
-        if (!$existingUser) {
-            return false; // Thất bại
-        }
+        Mail::to($existingUser->email)->send(new MailForPassWord($existingUser));
 
-        try {
-            Mail::to($existingUser->email)->send(new \App\Mail\MailForPassWord($existingUser));
-        } catch (\Exception $e) {
-            return false; // Thất bại
-        }
 
         return true; // Thành công
     }
@@ -97,20 +64,13 @@ class AuthService
     {
         $user = User::where('email', $email)->first();
 
-        if (!$user) {
-            return false; // Thất bại
-        }
-
         return true; // Thành công
     }
 
     public function resetPassword($request, $email)
     {
-        $user = User::where('email', $email)->first();
 
-        if (!$user) {
-            return false; // Thất bại
-        }
+        $user = User::where('email', $email)->first();
 
         $user->update([
             'password' => bcrypt($request->input('password')),
@@ -124,9 +84,6 @@ class AuthService
     public function editProfile($user)
     {
 
-        if (!$user) {
-            return false;
-        }
 
         return true;
     }

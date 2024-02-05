@@ -1,5 +1,4 @@
 <!-- resources/views/welcome.blade.php -->
-@extends('admin.layout.layout')
 
 @section('title', 'Danh sách bài viết')
 
@@ -15,9 +14,16 @@
                 </div>
                 <div class="col-sm-6 text-right">
                     <!-- Button to create a new post -->
-                    {{-- <a href="#" class="btn btn-success">Tạo mới</a> --}}
+                    <a href="#" class="btn btn-success">Tạo mới</a>
                     <!-- Button to delete all posts (you may replace '#delete-all' with the actual route) -->
-
+                    {{-- @auth
+                    <!-- If user is authenticated, show logout button -->
+                    <a href="{{ route('logout') }}" class="btn btn-danger">Đăng xuất</a>
+                @else
+                    <!-- If user is not authenticated, show register and login buttons -->
+                    <a href="{{ route('register') }}" class="btn btn-primary">Đăng ký</a>
+                    <a href="{{ route('login') }}" class="btn btn-secondary">Đăng nhập</a>
+                @endauth --}}
                 </div>
             </div>
         </div><!-- /.container-fluid -->
@@ -48,7 +54,7 @@
                                                     @endif
                                                     <div class="card-body">
                                                         <h5 class="card-title">
-                                                            <a href="{{ route('news_details', $post->slug) }}">{{ $post->title }}</a>
+                                                            <a href="{{ route('news_details_news', $post->slug) }}">{{ $post->title }}</a>
                                                         </h5>
                                                         <p class="card-text">{{ $post->publish_date }}</p>
                                                         <p class="card-text">{{ $post->description }}</p>
@@ -89,7 +95,7 @@
         // Thêm sự kiện click cho nút Xem danh sách bài viết
         document.getElementById('listpost-link').addEventListener('click', function() {
             // Chuyển đến trang Listpost khi click
-            window.location.href = "{{ route('admin.listPosts') }}";
+            window.location.href = "{{ route('listpost') }}";
         });
     </script>
 @endsection

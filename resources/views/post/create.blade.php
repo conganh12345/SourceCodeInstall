@@ -10,7 +10,7 @@
             </div>
             <!-- /.card-header -->
             <!-- form start -->
-            <form method="POST" action="{{ route('add_post_') }}" enctype="multipart/form-data">
+            <form method="POST" action="{{ route('admin.storePost') }}" enctype="multipart/form-data">
                 @csrf <!-- Thêm CSRF Token -->
 
                 <div class="card-body">

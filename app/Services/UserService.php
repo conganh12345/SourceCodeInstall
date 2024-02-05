@@ -25,12 +25,6 @@ public function updateUser(string $id, $requestData)
 {
             $user = User::find($id);
 
-            if (!$user) {
-                abort(404);
-            }
-
-
-
             $user->first_name = $requestData->input('first_name');
             $user->last_name = $requestData->input('last_name');
             $user->address = $requestData->input('address');

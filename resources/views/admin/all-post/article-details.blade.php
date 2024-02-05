@@ -12,6 +12,7 @@
             <div class="card-body">
                 <h2>{{ $post->title }}</h2>
                 <p>{{ $post->description }}</p>
+                <p>{{ $post->publish_date }}</p>
                 <p>{!! $post->content !!}</p>
             </div>
             <!-- /.card-body -->

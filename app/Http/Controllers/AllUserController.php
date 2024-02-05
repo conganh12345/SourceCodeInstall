@@ -65,7 +65,7 @@ class AllUserController extends Controller
     {
         $user = $this->userService->updateUser($id, $request);
 
-        return to_route('all-user-management')->with('success', 'Cập nhật tài khoản thành công');
+        return to_route('admin.manageAllUsers')->with('success', 'Cập nhật tài khoản thành công');
     }
 
     /**
@@ -85,6 +85,6 @@ class AllUserController extends Controller
     $users = $this->userService->searchUser($searchType, $searchValue);
 
     // Trả về kết quả tìm kiếm vào view hoặc làm gì đó khác với kết quả
-    return view('admin.all-user.index', compact('users'));
+    return view('admin.all-user.index', compact('users', 'searchType', 'searchValue'));
 }
 }

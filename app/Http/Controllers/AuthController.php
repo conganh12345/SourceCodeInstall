@@ -46,37 +46,17 @@ class AuthController extends Controller
 
     public function register(AuthRequest $request)
     {
+
         $result = $this->authService->registerUser($request);
 
         if ($result) {
-            return to_route('auth.login')->with('success', 'Đăng ký thành công! Vui lòng xác nhận tài khoản trước khi đăng nhập');
+            return to_route('auth.login')->with('success', 'Đăng ký thành công! Vui lòng chờ hệ thống xác nhận tài khoản trước khi đăng nhập');
         }
 
         return to_route('auth.register')->with('error', 'Đăng ký thất bại! Không thể gửi email xác nhận. Tài khoản có thể bị khóa hoặc không tồn tại.');
 
     }
 
-    public function verify($email)
-    {
-        $result = $this->authService->verifyAccount($email);
-
-        if ($result) {
-            return to_route('auth.login')->with('success', 'Xác nhận tài khoản thành công! Bạn có thể đăng nhập ngay bây giờ.');
-        }
-         return redirect('/')->with('error', 'Không tìm thấy người dùng.');
-
-    }
-
-    public function noverify($email)
-    {
-        $result = $this->authService->rejectVerification($email);
-
-        if ($result) {
-            return to_route('auth.register')->with('success', 'Từ chối xác thực thành công.');
-        }
-            return redirect('/')->with('error', 'Không tìm thấy người dùng.');
-
-    }
 
     public function login(Request $request)
     {
@@ -96,6 +76,7 @@ class AuthController extends Controller
 
     public function postForgotPassword(EmailRequest $request)
     {
+
         $result = $this->authService->forgotPassword($request);
 
         if ($result) {
@@ -147,4 +128,6 @@ class AuthController extends Controller
             return back()->with('error', 'Cập nhật hồ sơ thất bại');
 
     }
+
+
 }

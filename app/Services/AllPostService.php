@@ -9,7 +9,7 @@ use App\Jobs\SendEmailJob;
 
 class AllPostService
 {
-    public function getAllPosts($perPage = 4)
+    public function getAllPosts($perPage = 5)
     {
         $posts = Post::paginate($perPage);
 
@@ -71,10 +71,6 @@ class AllPostService
 public function updatePost(string $id, $requestData)
 {
     $post = Post::find($id);
-
-    if (!$post) {
-        abort(404);
-    }
 
     $previousStatus = $post->status;
 

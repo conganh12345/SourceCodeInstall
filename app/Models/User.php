@@ -8,6 +8,7 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
 use Spatie\Permission\Traits\HasRoles;
+use Database\Seeders\DatabaseSeeder;
 
 class User extends Authenticatable
 {
@@ -53,5 +54,17 @@ class User extends Authenticatable
     public function posts()
     {
         return $this->hasMany(Post::class);
+    }
+
+    //tự động chạy hàm gán vai trò khi đăng ký người dùng mới
+    protected static function boot()
+    {
+        parent::boot();
+
+
+        static::created(function ($user) {
+
+            \Artisan::call('db:seed', ['--class' => DatabaseSeeder::class]);
+        });
     }
 }

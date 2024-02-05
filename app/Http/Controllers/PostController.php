@@ -40,21 +40,23 @@ class PostController extends Controller
     public function store(AddpostRequest $request)
     {
 
+
         $result = $this->postService->createPost(Auth::user(), $request);
 
+
         if ($result) {
-            return to_route('listpost')->with('success', 'Tạo bài viết mới thành công');
+            return to_route('admin.listPosts')->with('success', 'Tạo bài viết mới thành công');
         }
 
-        return to_route('listpost')->with('error', 'Không thể tạo bài viết');
+        return to_route('admin.listPosts')->with('error', 'Không thể tạo bài viết');
     }
 
     /**
      * Display the specified resource.
      */
-    public function show(string $id)
+    public function show(Post $post)
     {
-        $post = $this->postService->getPostById($id);
+        // $post = $this->postService->getPostById($id);
 
         return view('post.article-details', compact('post'));
 
@@ -78,7 +80,7 @@ class PostController extends Controller
 
         $post = $this->postService->updatePost($id, $request);
 
-        return to_route('listpost')->with('success', 'Cập nhật bài viết thành công');
+        return to_route('admin.listPosts')->with('success', 'Cập nhật bài viết thành công');
     }
 
     /**
@@ -90,17 +92,17 @@ class PostController extends Controller
         $result = $this->postService->deletePost($request->posts_delete_id);
 
         if ($result) {
-            return to_route('listpost')->with('success', 'Xóa bài viết thành công');
+            return to_route('admin.listPosts')->with('success', 'Xóa bài viết thành công');
         }
 
-        return to_route('listpost')->with('error', 'Không thể xóa bài viết');
+        return to_route('admin.listPosts')->with('error', 'Không thể xóa bài viết');
     }
 
     public function destroyAll()
     {
         $this->postService->deleteAllPosts(Auth::user());
 
-        return to_route('listpost')->with('success', 'Xóa tất cả bài viết thành công');
+        return to_route('admin.listPosts')->with('success', 'Xóa tất cả bài viết thành công');
     }
 
     public function articleDetails()
@@ -110,6 +112,19 @@ class PostController extends Controller
         return view('all-post', compact('posts'));
     }
     public function newsDetails($slug)
+    {
+        $post = $this->postService->showNewsDetails($slug);
+
+        return view('post.article-details', compact('post'));
+    }
+
+    public function allnews()
+    {
+        $posts = $this->postService->showArticleDetails();
+
+        return view('news', compact('posts'));
+    }
+    public function newsSlug($slug)
     {
         $post = $this->postService->showNewsDetails($slug);
 

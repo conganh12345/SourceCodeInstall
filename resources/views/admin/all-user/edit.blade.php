@@ -10,7 +10,7 @@
             </div>
             <!-- /.card-header -->
             <!-- form start -->
-            <form method="POST" action="{{route('edit_user_',$user->id)}}">
+            <form method="POST" action="{{route('admin.updateUser',$user->id)}}">
                 @csrf <!-- Thêm CSRF Token -->
 
                 <div class="card-body">
@@ -39,10 +39,10 @@
                     <div class="form-group">
                         <label for="status">Status</label>
                         <select class="form-control" id="status" name="status">
-                            <option value="0" {{ $user->status == 0 ? 'selected' : '' }}>0</option>
-                            <option value="1" {{ $user->status == 1 ? 'selected' : '' }}>1</option>
-                            <option value="2" {{ $user->status == 2 ? 'selected' : '' }}>2</option>
-                            <option value="3" {{ $user->status == 3 ? 'selected' : '' }}>3</option>
+                            <option value="0" {{ $user->status == 0 ? 'selected' : '' }}>PENDING</option>
+                            <option value="1" {{ $user->status == 1 ? 'selected' : '' }}>ACTIVE</option>
+                            <option value="2" {{ $user->status == 2 ? 'selected' : '' }}>REJECTED</option>
+                            <option value="3" {{ $user->status == 3 ? 'selected' : '' }}>LOCKED</option>
                         </select>
                         @error('status')
                             <span style="color: red">{{ $message }}</span>

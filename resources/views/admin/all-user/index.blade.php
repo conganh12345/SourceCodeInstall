@@ -22,12 +22,12 @@
                 <div class="col-md-6">
                     <form action="{{ route('searchUser') }}" method="GET">
                         <div class="input-group">
-                            <input type="text" name="search" class="form-control" placeholder="Tìm kiếm tài khoản">
+                            <input type="text" name="search" class="form-control" placeholder="Tìm kiếm tài khoản" value="{{ old('search', isset($searchValue) ? $searchValue : '') }}">
 
                             <!-- Thêm một dropdown để chọn loại tìm kiếm -->
                             <select name="search_type" class="form-control">
-                                <option value="name">Theo tên</option>
-                                <option value="email">Theo email</option>
+                                <option value="name" {{ old('search_type', isset($searchType) && $searchType == 'name' ? 'selected' : '') }}>Theo tên</option>
+                                <option value="email" {{ old('search_type', isset($searchType) && $searchType == 'email' ? 'selected' : '') }}>Theo email</option>
                             </select>
 
                             <button type="submit" class="btn btn-primary">Tìm kiếm</button>
@@ -60,10 +60,23 @@
                                             <td>{{ $user->name }}</td>
                                             <td>{{ $user->email }}</td>
                                             <td>{{ $user->address }}</td>
-                                            <td>{{ $user->status }}</td>
+                                            <td>
+                                                @if($user->status == '0')
+                                                    <span class="badge badge-warning">Pending</span>
+                                                @elseif($user->status == '1')
+                                                    <span class="badge badge-success">Active</span>
+                                                @elseif($user->status == '2')
+                                                    <span class="badge badge-danger">Rejected</span>
+                                                @elseif($user->status == '3')
+                                                    <span class="badge badge-secondary">Locked</span>
+                                                @else
+                                                    {{ $user->status }}
+                                                @endif
+                                            </td>
+
                                             <td>
                                                 <!-- Button edit -->
-                                                <a href="{{ route('edit_user', $user->id) }}" class="btn btn-warning btn-sm" style="margin-right: 10px;">Edit</a>
+                                                <a href="{{ route('admin.editUser', $user->id) }}" class="btn btn-warning btn-sm" style="margin-right: 10px;">Edit</a>
                                             </td>
                                         </tr>
                                     @endforeach

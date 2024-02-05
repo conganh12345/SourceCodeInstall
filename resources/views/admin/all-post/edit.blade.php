@@ -10,7 +10,7 @@
             </div>
             <!-- /.card-header -->
             <!-- form start -->
-            <form method="POST" action="{{ route('all_edit_post_', $post->id) }}" enctype="multipart/form-data">
+            <form method="POST" action="{{ route('admin.updateAllPost', $post->id) }}" enctype="multipart/form-data">
                 @csrf <!-- Thêm CSRF Token -->
 
                 <div class="card-body">
@@ -56,8 +56,8 @@
                     <div class="form-group">
                         <label for="status">Status</label>
                         <select class="form-control" id="status" name="status">
-                            <option value="0" {{ $post->status == '0' ? 'selected' : '' }}>0</option>
-                            <option value="1" {{ $post->status == '1' ? 'selected' : '' }}>1</option>
+                            <option value="0" {{ $post->status == '0' ? 'selected' : '' }}>PENDING</option>
+                            <option value="1" {{ $post->status == '1' ? 'selected' : '' }}>ACTIVE</option>
                         </select>
                         @error('status')
                             <span style="color: red">{{ $message }}</span>

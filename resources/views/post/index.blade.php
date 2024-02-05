@@ -1,6 +1,18 @@
 <!-- resources/views/welcome.blade.php -->
 @extends('admin.layout.layout')
+<style>
+    /* CSS cho cột Title và Description */
+    td.title,
+    td.description {
+        max-width: 200px; /* Điều chỉnh giá trị theo ý muốn */
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
 
+    /* CSS cho cột Action */
+
+</style>
 @section('title', 'Danh sách bài viết')
 
 @section('contents')
@@ -8,7 +20,7 @@
 <div class="modal fade" id="deleteModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog">
       <div class="modal-content">
-        <form action="{{ route('delete_post') }}" method="POST">
+        <form action="{{ route('admin.deletePosts') }}" method="POST">
             @csrf
                     <div class="modal-header">
                     <h3 class="modal-title fs-5" id="exampleModalLabel">Xóa bài viết</h3>
@@ -35,9 +47,9 @@
                 </div>
                 <div class="col-sm-6 text-right">
                     <!-- Button to create a new post -->
-                    <a href="{{route('add_post')}}" class="btn btn-success">Tạo mới</a>
+                    <a href="{{route('admin.createPost')}}" class="btn btn-success">Tạo mới</a>
                     <!-- Button to delete all posts (you may replace '#delete-all' with the actual route) -->
-                    <a href="{{route('delete_allpost')}}" class="btn btn-danger" id="delete-all">Xóa tất cả</a>
+                    <a href="{{route('admin.deleteUserPosts')}}" class="btn btn-danger" id="delete-all">Xóa tất cả</a>
                 </div>
             </div>
         </div><!-- /.container-fluid -->
@@ -58,8 +70,8 @@
                                 <thead>
                                     <tr>
                                         <th>Thumbnail</th>
-                                        <th>Title</th>
-                                        <th>Description</th>
+                                        <th class="title">Title</th>
+                                        <th class="description">Description</th>
                                         <th>Publish Date</th>
                                         <th>Status</th>
                                         <th>Action</th>
@@ -71,24 +83,36 @@
                                         <tr>
                                             <td>
                                                 @if($post->thumbnail)
-                                                <img src="{{ asset($post->thumbnail) }}" alt="Thumbnail" style="max-width: 70px; max-height: 100px; width: auto; height: auto;">
+                                                <img src="{{ asset($post->thumbnail) }}" alt="Thumbnail" style="max-width: 100px; max-height: 120px; width: auto; height: auto;">
 
                                             @else
                                                 <p>No thumbnail available</p>
                                             @endif
 
                                             </td>
-                                            <td>{{ $post->title }}</td>
-                                            <td>{{ $post->description }}</td>
+                                            <td class="title">
+                                                <!-- Nội dung cột Title -->
+                                                {{ $post->title }}
+                                            </td>
+                                            <td class="description">
+                                                <!-- Nội dung cột Description -->
+                                                {{ $post->description }}
+                                            </td>
                                             <td>{{ $post->publish_date }}</td>
-                                            <td>{{ $post->status }}</td>
                                             <td>
+                                                @if($post->status == '1')
+                                                    <span class="badge badge-success">Active</span>
+                                                @else
+                                                    <span class="badge badge-warning">Pending</span>
+                                                @endif
+                                            </td>
+                                            <td class="actions">
                                                 <!-- Icon show -->
                                    <!-- Button show -->
-                                                    <button onclick="window.location='{{ route('show_post', $post->id) }}';" class="btn btn-info btn-sm" style="margin-right: 10px;"><i class="fas fa-eye"></i></button>
+                                                    <button onclick="window.location='{{ route('admin.showPost', $post) }}';" class="btn btn-info btn-sm" style="margin-right: 10px;"><i class="fas fa-eye"></i></button>
 
                                                     <!-- Button edit -->
-                                                    <button onclick="window.location='{{ route('edit_post', $post->id) }}';" class="btn btn-warning btn-sm" style="margin-right: 10px;"><i class="fas fa-edit"></i></button>
+                                                    <button onclick="window.location='{{ route('admin.editPost', $post->id) }}';" class="btn btn-warning btn-sm" style="margin-right: 10px;"><i class="fas fa-edit"></i></button>
 
                                                     <!-- Button delete -->
                                                     <button class="btn btn-danger btn-sm deletePost" value="{{$post->id}}"><i class="fas fa-trash"></i></button>
@@ -105,7 +129,7 @@
                         <!-- /.card-body -->
                         <div class="card-footer clearfix">
                             <ul class="pagination pagination-sm m-0 float-right">
-                                {{ $posts->links() }}
+                                {{-- {{ $posts->links() }} --}}
                             </ul>
                         </div>
                     </div>
@@ -132,7 +156,7 @@
         // Thêm sự kiện click cho nút Xem danh sách bài viết
         document.getElementById('listpost-link').addEventListener('click', function() {
             // Chuyển đến trang Listpost khi click
-            window.location.href = "{{ route('listpost') }}";
+            window.location.href = "{{ route('admin.listPosts') }}";
         });
     </script>
 @endsection

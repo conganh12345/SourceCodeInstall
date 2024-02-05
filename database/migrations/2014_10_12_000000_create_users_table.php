@@ -23,16 +23,7 @@ return new class extends Migration
             $table->timestamps();
         });
 
-        // Insert default admin user
-        DB::table('users')->insert([
-            'first_name' => 'Admin',
-            'last_name' => 'Super',
-            'email' => 'superadmin@khgc.com',
-            'password' => bcrypt('Abcd@1234'),
-            'role' => 'admin',
-            'created_at' => now(),
-            'updated_at' => now(),
-        ]);
+
     }
 
     /**

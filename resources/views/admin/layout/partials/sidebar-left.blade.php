@@ -27,25 +27,26 @@
                 </a>
             </li>
 
-            @role('user')
-            <li class="nav-item">
-                <a href="{{ route('listpost') }}" class="nav-link" id="listpost-link">
-                    <i class="far fa-circle nav-icon"></i>
-                    <p>Xem danh sách bài viết</p>
-                </a>
-            </li>
-            @endrole
+
             @role('admin')
             <li class="nav-item">
-                <a href="{{ route('all-post-management') }}" class="nav-link" id="postMangement-link">
+                <a href="{{ route('admin.manageAllPosts') }}" class="nav-link" id="postMangement-link">
                     <i class="far fa-circle nav-icon"></i>
                     <p>Quản lý bài viết</p>
                 </a>
             </li>
             <li class="nav-item">
-                <a href="{{ route('all-user-management') }}" class="nav-link" id="userManagement-link">
+                <a href="{{ route('admin.manageAllUsers') }}" class="nav-link" id="userManagement-link">
                     <i class="far fa-circle nav-icon"></i>
                     <p>Quản lý tài khoản</p>
+                </a>
+            </li>
+            @endrole
+            @role('user')
+            <li class="nav-item">
+                <a href="{{ route('admin.listPosts') }}" class="nav-link" id="listpost-link">
+                    <i class="far fa-circle nav-icon"></i>
+                    <p>Xem danh sách bài viết</p>
                 </a>
             </li>
             @endrole
