@@ -59,7 +59,7 @@
                     <span style="color: red">{{ $message }}</span>
                 @enderror
                 <div class="form-group">
-                    <label for="password">Password</label>
+                    <label for="password">Confirm Password</label>
                     <input type="password" class="form-control" name="confirmpassword" id="confirmpassword"  required>
                 </div>
 

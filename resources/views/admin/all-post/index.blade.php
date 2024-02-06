@@ -1,5 +1,6 @@
 <!-- resources/views/welcome.blade.php -->
 @extends('admin.layout.layout')
+
 <style>
     /* CSS cho cột Title và Description */
     td.title,
@@ -89,7 +90,7 @@
                         </div>
                         <!-- /.card-header -->
                         <div class="card-body">
-                            <table class="table table-bordered">
+                            <table class="table table-bordered" id= "data-table">
                                 <thead>
                                     <tr>
                                         <th>Thumbnail</th>
@@ -196,4 +197,26 @@
     </script>
 @endsection
 
+
+
+
+<script type="text/javascript">
+
+    $(document).ready( function () {
+        $('#data-table').DataTable({
+            "processing" :true,
+            "serverSide" :true,
+            "ajax": "{{route('getPosts')}}",
+            "columns": [
+                { "data": 'thumbnail' },
+                { "data": 'title' },
+                { "data": 'description' },
+                { "data": 'publish_date' },
+                { "data": 'status' },
+                { "data": 'action' },
+            ],
+
+        });
+});
+</script>
 

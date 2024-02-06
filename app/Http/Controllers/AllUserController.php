@@ -56,7 +56,7 @@ class AllUserController extends Controller
      */
     public function edit(User $user)
     {
-        // $user = $this->userService->getUserById($id);
+
         return view('admin.all-user.edit', compact('user'));
     }
 

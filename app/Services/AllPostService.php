@@ -61,95 +61,94 @@ class AllPostService
     }
 
     public function getPostById(string $id)
-{
-
-    $post = Post::find($id);
-
-    return $post;
-}
-
-public function updatePost($post, $requestData)
-{
-    // $post = Post::find($id);
-
-    $previousStatus = $post->status;
-
-    $post->title = $requestData->input('title');
-    $post->slug = $requestData->input('slug');
-    $post->description = $requestData->input('description');
-    $post->content = $requestData->input('content');
-    $post->publish_date = $requestData->input('publish_date');
-    $post->status = $requestData->input('status');
-
-    if ($requestData->hasFile('thumbnail')) {
-        // Kiểm tra xem ảnh cũ có tồn tại không và xóa nó
-        if ($post->getMedia()->count() > 0) {
-            $post->getMedia()[0]->delete();
-        }
-
-        // Thêm ảnh mới vào media collection với tên 'thumbnail'
-        $thumbnailFile = $requestData->file('thumbnail');
-        $post->addMedia($thumbnailFile)->toMediaCollection();
-    }
-
-    $post->save();
-
-
-    if ($previousStatus != $post->status) {
-        $this->sendPostStatusEmail($post);
-    }
-
-    return $post;
-}
-
-private function sendPostStatusEmail($post)
-{
-    $data = [
-        'email' => $post->user->email,
-        'status' => $post->status,
-        'title' => $post->title,
-
-    ];
-
-    // Thực hiện công việc gửi email thông báo
-    dispatch(new SendEmailJob($data));
-}
-public function showArticleDetails()
     {
 
-    $statusActive = '1'; // Thay thế 'active' bằng giá trị ENUM thật của bạn
-    $posts = Post::where('status', $statusActive)->get();
+        $post = Post::find($id);
 
-    return $this->transformPosts($posts);
-
+        return $post;
     }
-    public function showNewsDetails($slug)
+
+    public function updatePost($post, $requestData)
     {
 
-        $statusActive = '1'; // Replace '1' with the actual ENUM value
-        $post = Post::where('slug', $slug)
-                     ->where('status', $statusActive)
-                     ->first();
+        $previousStatus = $post->status;
 
-        return $this->transformPosts($post);
+        $post->title = $requestData->input('title');
+        $post->slug = $requestData->input('slug');
+        $post->description = $requestData->input('description');
+        $post->content = $requestData->input('content');
+        $post->publish_date = $requestData->input('publish_date');
+        $post->status = $requestData->input('status');
 
+        if ($requestData->hasFile('thumbnail')) {
+            // Kiểm tra xem ảnh cũ có tồn tại không và xóa nó
+            if ($post->getMedia()->count() > 0) {
+                $post->getMedia()[0]->delete();
+            }
+
+            // Thêm ảnh mới vào media collection với tên 'thumbnail'
+            $thumbnailFile = $requestData->file('thumbnail');
+            $post->addMedia($thumbnailFile)->toMediaCollection();
+        }
+
+        $post->save();
+
+
+        if ($previousStatus != $post->status) {
+            $this->sendPostStatusEmail($post);
+        }
+
+        return $post;
     }
 
-    public function searchPosts($searchType, $searchValue)
+    private function sendPostStatusEmail($post)
     {
-        $query = Post::query();
+        $data = [
+            'email' => $post->user->email,
+            'status' => $post->status,
+            'title' => $post->title,
 
-        if ($searchType === 'email') {
-            $query->whereHas('user', function ($userQuery) use ($searchValue) {
-                $userQuery->where('email', 'like', '%' . $searchValue . '%');
-            });
-        }
+        ];
 
-        if ($searchType === 'title') {
-            $query->where('title', 'like', '%' . $searchValue . '%');
-        }
-
-        return $query->get();
+        // Thực hiện công việc gửi email thông báo
+        dispatch(new SendEmailJob($data));
     }
+    public function showArticleDetails()
+        {
+
+        $statusActive = '1'; // Thay thế 'active' bằng giá trị ENUM thật của bạn
+        $posts = Post::where('status', $statusActive)->get();
+
+        return $this->transformPosts($posts);
+
+        }
+        public function showNewsDetails($slug)
+        {
+
+            $statusActive = '1'; // Replace '1' with the actual ENUM value
+            $post = Post::where('slug', $slug)
+                        ->where('status', $statusActive)
+                        ->first();
+
+            return $this->transformPosts($post);
+
+        }
+
+        public function searchPosts($searchType, $searchValue)
+        {
+            $query = Post::query();
+
+            if ($searchType === 'email') {
+                $query->whereHas('user', function ($userQuery) use ($searchValue) {
+                    $userQuery->where('email', 'like', '%' . $searchValue . '%');
+                });
+            }
+
+            if ($searchType === 'title') {
+                $query->where('title', 'like', '%' . $searchValue . '%');
+            }
+
+            return $query->get();
+        }
 
 }

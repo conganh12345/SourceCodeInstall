@@ -67,6 +67,8 @@ Route::group(['prefix' => 'admin'], function () {
 
     Route::group(['middleware' => ['admin','role:admin']], function () {
         Route::get('/all-post-management',[AllPostController::class, 'index'])->name('admin.manageAllPosts');
+        Route::get('/get-posts',[AllPostController::class, 'getPosts'])->name('getPosts');
+
         Route::get('/add-post',[AllPostController::class, 'create'])->name('admin.createAllPost');
         Route::post('/add-post',[AllPostController::class, 'store'])->name('admin.storeAllPost');
         Route::get('/edit-post/{post}',[AllPostController::class, 'edit'])->name('admin.editAllPost');

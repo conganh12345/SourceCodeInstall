@@ -8,6 +8,7 @@ use App\Http\Requests\EditPostRequest;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Http\Request;
 use App\Models\Post;
+use DataTables;
 
 class AllPostController extends Controller
 {
@@ -54,7 +55,6 @@ class AllPostController extends Controller
      */
     public function show(Post $post)
     {
-        // $post = $this->postService->getPostById($id);
 
         return view('admin.all-post.article-details', compact('post'));
     }
@@ -65,7 +65,6 @@ class AllPostController extends Controller
      */
     public function edit(Post $post)
     {
-        // $post = $this->postService->getPostById($id);
         return view('admin.all-post.edit', compact('post'));
     }
 
@@ -100,17 +99,31 @@ class AllPostController extends Controller
         return to_route('admin.manageAllPosts')->with('success', 'Xóa tất cả bài viết thành công');
     }
 
-    public function search(Request $request)
-{
-    $searchType = $request->input('search_type');
-    $searchValue = $request->input('search');
+        public function search(Request $request)
+    {
+        $searchType = $request->input('search_type');
+        $searchValue = $request->input('search');
 
-    // Gọi phương thức tìm kiếm từ PostService
-    $posts = $this->postService->searchPosts($searchType, $searchValue);
+        $posts = $this->postService->searchPosts($searchType, $searchValue);
 
-    // Trả về kết quả tìm kiếm vào view hoặc làm gì đó khác với kết quả
-    return view('admin.all-post.index', compact('posts', 'searchType', 'searchValue'));
-}
+        return view('admin.all-post.index', compact('posts', 'searchType', 'searchValue'));
+    }
+
+
+    public function getPosts()
+    {
+        $posts = Post::select('thumbnail','title','description','publish_date','status');
+        return Datatables::of($posts)
+                ->addColumn('action', function ($posts) {
+                    $btnShow = '<a href="' . route('your.route.show', $posts->id) . '" class="btn btn-info">Show</a>';
+                    $btnEdit = '<a href="' . route('your.route.edit', $posts->id) . '" class="btn btn-warning">Edit</a>';
+                    $btnDelete = '<button class="btn btn-danger delete" data-id="' . $posts->id . '">Delete</button>';
+
+                    return $btnShow . ' ' . $btnEdit . ' ' . $btnDelete;
+                })
+                ->make(true);
+
+    }
 
 
 }

@@ -12,19 +12,7 @@
                 <div class="col-sm-6">
                     <h1>Tin tức</h1>
                 </div>
-                <div class="col-sm-6 text-right">
-                    <!-- Button to create a new post -->
-                    <a href="#" class="btn btn-success">Tạo mới</a>
-                    <!-- Button to delete all posts (you may replace '#delete-all' with the actual route) -->
-                    {{-- @auth
-                    <!-- If user is authenticated, show logout button -->
-                    <a href="{{ route('logout') }}" class="btn btn-danger">Đăng xuất</a>
-                @else
-                    <!-- If user is not authenticated, show register and login buttons -->
-                    <a href="{{ route('register') }}" class="btn btn-primary">Đăng ký</a>
-                    <a href="{{ route('login') }}" class="btn btn-secondary">Đăng nhập</a>
-                @endauth --}}
-                </div>
+
             </div>
         </div><!-- /.container-fluid -->
     </section>
@@ -89,29 +77,8 @@
 @endsection
 
 <!-- Thêm script để xử lý khi nhấn nút Home -->
-@section('scripts')
-    @parent
-    <script>
-        // Thêm sự kiện click cho nút Xem danh sách bài viết
-        document.getElementById('listpost-link').addEventListener('click', function() {
-            // Chuyển đến trang Listpost khi click
-            window.location.href = "{{ route('listpost') }}";
-        });
-    </script>
-@endsection
 
-@section('delete')
-    <script>
-        $(document).ready(function(){
-            $('.deletePost').click(function(e){
-                e.preventDefault();
 
-                var post_id = $(this).val();
-                $('#post_id').val(post_id);
-                $('#deleteModal').modal('show');
-            })
-        })
-    </script>
-@endsection
+
 
 
