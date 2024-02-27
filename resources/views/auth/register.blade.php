@@ -20,7 +20,7 @@
         <div class="register-box-body">
             <p class="login-box-msg">Register a new membership</p>
 
-            <form method="POST" action="{{ url('/auth/register') }}">
+            <form method="POST" action="{{ route('auth.register') }}">
                 @csrf
 
                 <div class="form-group">

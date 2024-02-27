@@ -6,6 +6,7 @@ namespace App\Services;
 use App\Models\Post;
 use Illuminate\Support\Facades\Mail;
 use App\Jobs\SendEmailJob;
+use App\Enums\UserStatus;
 
 class AllPostService
 {
@@ -17,8 +18,6 @@ class AllPostService
     }
     protected function transformPosts($posts)
     {
-        // Bạn có thể thêm bất kỳ xử lý chuyển đổi dữ liệu nào bạn cần ở đây
-        // Chẳng hạn, định dạng ngày, làm việc với hình ảnh, v.v.
         return $posts;
     }
     public function createPost($user, $requestData)
@@ -39,7 +38,6 @@ class AllPostService
             // Thêm ảnh vào disk 'public' mà không thuộc collection nào cả
             $post->addMedia($thumbnailFile)->toMediaCollection();
 
-            // Không cần lưu tên tệp tin vào trường 'thumbnail' của bài viết nữa
         }
 
         return $post;
@@ -110,13 +108,12 @@ class AllPostService
 
         ];
 
-        // Thực hiện công việc gửi email thông báo
         dispatch(new SendEmailJob($data));
     }
     public function showArticleDetails()
         {
 
-        $statusActive = '1'; // Thay thế 'active' bằng giá trị ENUM thật của bạn
+        $statusActive = UserStatus::ACTIVE;
         $posts = Post::where('status', $statusActive)->get();
 
         return $this->transformPosts($posts);
@@ -125,7 +122,7 @@ class AllPostService
         public function showNewsDetails($slug)
         {
 
-            $statusActive = '1'; // Replace '1' with the actual ENUM value
+            $statusActive = UserStatus::ACTIVE;
             $post = Post::where('slug', $slug)
                         ->where('status', $statusActive)
                         ->first();

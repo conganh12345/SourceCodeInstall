@@ -25,6 +25,8 @@ class AllPostController extends Controller
     {
         $posts = $this->postService->getAllPosts();
         return view('admin.all-post.index', compact('posts'));
+
+        // return view('lol');
     }
 
     /**
@@ -112,18 +114,18 @@ class AllPostController extends Controller
 
     public function getPosts()
     {
-        $posts = Post::select('thumbnail','title','description','publish_date','status');
-        return Datatables::of($posts)
-                ->addColumn('action', function ($posts) {
-                    $btnShow = '<a href="' . route('your.route.show', $posts->id) . '" class="btn btn-info">Show</a>';
-                    $btnEdit = '<a href="' . route('your.route.edit', $posts->id) . '" class="btn btn-warning">Edit</a>';
-                    $btnDelete = '<button class="btn btn-danger delete" data-id="' . $posts->id . '">Delete</button>';
+        $post = Post::select('thumbnail','title','description','publish_date','status');
+        return Datatables::of($post)
+                ->addColumn('action', function ($post) {
+                    $btnShow = '<button onclick="window.location=' . "'" . route('admin.createAllPost') . "'" . ';" class="btn btn-info btn-sm"><i class="fas fa-eye"></i></button>';
+                    $btnEdit = '<a href="' . '" class="btn btn-warning btn-sm"><i class="fas fa-edit"></i></a>';
+                    $btnDelete = '<button class="btn btn-danger btn-sm deletePost" data-toggle="modal" data-target="#deleteModal" data-post-id="' . $post->id . '"><i class="fas fa-trash"></i></button>';
 
                     return $btnShow . ' ' . $btnEdit . ' ' . $btnDelete;
                 })
                 ->make(true);
-
     }
+
 
 
 }

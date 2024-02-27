@@ -21,7 +21,7 @@
         <div class="login-box-body">
             <p class="login-box-msg">Please enter the registered email address</p>
 
-            <form method="POST" action="{{ url('/auth/forgot-password') }}">
+            <form method="POST" action="{{ route('auth.forgotpass') }}">
                 @csrf
 
                 <div class="form-group">

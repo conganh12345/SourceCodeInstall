@@ -21,7 +21,7 @@
         <div class="login-box-body">
             <p class="login-box-msg">Sign in to start your session</p>
 
-            <form method="POST" action="{{ url('/auth/login') }}">
+            <form method="POST" action="{{ route('auth.login') }}">
                 @csrf
 
                 <div class="form-group">
@@ -33,10 +33,15 @@
                     <label for="password">Password</label>
                     <input type="password" class="form-control" name="password" id="password" required>
                 </div>
-
                 <div class="row">
-                    <div class="col-xs-12">
-                        <a href="{{ route('auth.forgotpass') }}" class="text-right">Forgot Password?</a>
+                    <div class="col-xs-7">
+                        <div class="form-check">
+                            <input type="checkbox" class="form-check-input" name="remember" id="remember">
+                            <label class="form-check-label" for="remember">Remember Me</label>
+                        </div>
+                    </div>
+                    <div class="col-xs-5">
+                        <a style="margin-left: 120px" href="{{ route('auth.forgotpass') }}" class="text-right">Forgot Password?</a>
                     </div>
                 </div>
 
@@ -68,15 +73,15 @@
         }
         toastr.error("{{ Session::get('error') }}");
     </script>
-@endif
-@if (Session::has('success'))
-<script>
-    toastr.options= {
-        "progressBar" :true,
-        "closebutton" :true,
-    }
-    toastr.success("{{ Session::get('success') }}");
-</script>
-@endif
+    @endif
+    @if (Session::has('success'))
+    <script>
+        toastr.options= {
+            "progressBar" :true,
+            "closebutton" :true,
+        }
+        toastr.success("{{ Session::get('success') }}");
+    </script>
+    @endif
 </body>
 </html>

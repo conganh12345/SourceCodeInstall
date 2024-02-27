@@ -56,7 +56,6 @@ class PostController extends Controller
      */
     public function show(Post $post)
     {
-        // $post = $this->postService->getPostById($id);
 
         return view('post.article-details', compact('post'));
 
@@ -67,7 +66,6 @@ class PostController extends Controller
      */
     public function edit(Post $post)
     {
-        // $post = $this->postService->getPostById($id);
 
         return view('post.edit', compact('post'));
     }

@@ -33,7 +33,7 @@ class AuthService
         Mail::to($user->email)->send(new VerifyAccount($user));
 
 
-        return true; // Thành công
+        return true;
     }
 
 
@@ -44,10 +44,10 @@ class AuthService
         $password = $request->input('password');
 
         if (Auth::attempt(['email' => $email, 'password' => $password])) {
-            return true; // Thành công
+            return true;
         }
 
-        return false; // Thất bại
+        return false;
     }
 
     public function forgotPassword($request)
@@ -57,14 +57,14 @@ class AuthService
         Mail::to($existingUser->email)->send(new MailForPassWord($existingUser));
 
 
-        return true; // Thành công
+        return true;
     }
 
     public function resetPasswordView($email)
     {
         $user = User::where('email', $email)->first();
 
-        return true; // Thành công
+        return true;
     }
 
     public function resetPassword($request, $email)
@@ -78,12 +78,11 @@ class AuthService
 
         $user->save();
 
-        return true; // Thành công
+        return true;
     }
 
     public function editProfile($user)
     {
-
 
         return true;
     }

@@ -4,6 +4,7 @@
 namespace App\Services;
 
 use App\Models\Post;
+use App\Enums\UserStatus;
 
 class PostService
 {
@@ -15,8 +16,6 @@ class PostService
     }
     protected function transformPosts($posts)
     {
-        // Bạn có thể thêm bất kỳ xử lý chuyển đổi dữ liệu nào bạn cần ở đây
-        // Chẳng hạn, định dạng ngày, làm việc với hình ảnh, v.v.
         return $posts;
     }
     public function createPost($user, $requestData)
@@ -37,7 +36,6 @@ class PostService
             // Thêm ảnh vào disk 'public' mà không thuộc collection nào cả
             $post->addMedia($thumbnailFile)->toMediaCollection();
 
-            // Không cần lưu tên tệp tin vào trường 'thumbnail' của bài viết nữa
         }
 
         return $post;
@@ -68,7 +66,6 @@ class PostService
 
 public function updatePost($post, $requestData)
 {
-    // $post = Post::find($id);
 
     if (!$post) {
         abort(404);
@@ -100,7 +97,7 @@ public function updatePost($post, $requestData)
 public function showArticleDetails()
     {
 
-    $statusActive = '1'; // Thay thế 'active' bằng giá trị ENUM thật của bạn
+    $statusActive = UserStatus::ACTIVE;
     $posts = Post::where('status', $statusActive)->get();
 
     return $this->transformPosts($posts);
@@ -109,7 +106,7 @@ public function showArticleDetails()
     public function showNewsDetails($slug)
     {
 
-        $statusActive = '1'; // Replace '1' with the actual ENUM value
+        $statusActive = UserStatus::ACTIVE;
         $post = Post::where('slug', $slug)
                      ->where('status', $statusActive)
                      ->first();

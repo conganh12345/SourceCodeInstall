@@ -19,7 +19,19 @@
 
   <!-- Toastr CSS -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css" integrity="sha512-vKMx8UnXk60zUwyUnUPM3HbQo8QfmNx7+ltw8Pm5zLusl1XIfwcxo8DbWCqMGKaWeNxWA8yrx5v3SaVpMvR3CA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+  <style>
+    /* CSS cho cột Title và Description */
+    td.title,
+    td.description {
+        max-width: 200px; /* Điều chỉnh giá trị theo ý muốn */
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
 
+    /* CSS cho cột Action */
+
+</style>
 </head>
 <body class="hold-transition sidebar-mini layout-fixed">
 
@@ -34,6 +46,30 @@
   <aside class="main-sidebar sidebar-dark-primary elevation-4">
     @include('admin.layout.partials.sidebar-left')
   </aside>
+
+<!-- Popup xác nhận xóa (Modal) -->
+<div class="modal fade" id="deleteModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <form action="{{ route('admin.deleteAllPost') }}" method="POST">
+                @csrf
+                <div class="modal-header">
+                    <h3 class="modal-title fs-5" id="exampleModalLabel">Xóa bài viết</h3>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <input type="hidden" name="posts_delete_id" id="post_id">
+                    <h5>Bạn có chắc chắn muốn xóa bài viết này không?</h5>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Đóng</button>
+                    <button type="submit" class="btn btn-primary">Xác nhận</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
 
   <!-- Content Wrapper. Contains page content -->
   <div class="content-wrapper">
@@ -87,6 +123,7 @@
                                         <th>Action</th>
                                     </tr>
                                 </thead>
+
                             </table>
                         </div>
                         <div class="card-footer clearfix">
@@ -147,30 +184,46 @@
 @endif
 
 <script>
-    $(document).ready(function(){
-        $('.deletePost').click(function(e){
-            e.preventDefault();
-            var post_id = $(this).val();
-            $('#post_id').val(post_id);
-            $('#deleteModal').modal('show');
-        })
-    })
-
-    $(document).ready( function () {
-        $('#data-table').DataTable({
-            "processing" :true,
-            "serverSide" :true,
-            "ajax": "{{route('getPosts')}}",
-            "columns": [
-                { "data": 'thumbnail' },
-                { "data": 'title' },
-                { "data": 'description' },
-                { "data": 'publish_date' },
-                { "data": 'status' },
-                { "data": 'action' },
-            ],
-        });
+    var assetBaseUrl = '{{ asset("") }}';
+   $(document).ready(function () {
+    $('.deletePost').click(function (e) {
+        e.preventDefault();
+        var post_id = $(this).data('id');
+        $('#post_id').val(post_id);
+        $('#deleteModal').modal('show');
     });
+
+    $('#data-table').DataTable({
+    "processing": true,
+    "serverSide": true,
+    "ajax": "{{ route('getPosts') }}",
+    "columns": [
+        {
+            "data": 'thumbnail',
+            "render": function (data, type, full, meta) {
+
+                return '<img src="' + assetBaseUrl + data + '" alt="Thumbnail" style="max-width: 100px; max-height: 120px; width: auto; height: auto;">';
+            }
+        },
+        { "data": 'title' },
+        { "data": 'description' },
+        { "data": 'publish_date' },
+        {
+            "data": 'status',
+            "render": function (data, type, full, meta) {
+                if (data == '1') {
+                    return '<span class="badge badge-success">Active</span>';
+                } else {
+                    return '<span class="badge badge-warning">Pending</span>';
+                }
+            }
+        },
+        { "data": 'action' },
+    ],
+});
+
+});
+
 </script>
 
 </body>

@@ -25,13 +25,13 @@ use App\Models\Post;
 Route::group(['prefix' => 'auth'], function () {
     // Form đăng ký
     Route::get('/register', [AuthController::class, 'showFormRegister'])->middleware('user')->name('auth.register');
-    Route::post('/register', [AuthController::class, 'register']);
+    Route::post('/register', [AuthController::class, 'register'])->name('auth.register');
     // Form đăng nhập
     Route::get('/login', [AuthController::class, 'showFormLogin'])->middleware('user')->name('auth.login');
-    Route::post('/login', [AuthController::class, 'login']);
+    Route::post('/login', [AuthController::class, 'login'])->name('auth.login');
     // Form quên mật khẩu
     Route::get('/forgot-password', [AuthController::class, 'forgotPassword'])->name('auth.forgotpass');
-    Route::post('/forgot-password', [AuthController::class, 'postForgotPassword']);
+    Route::post('/forgot-password', [AuthController::class, 'postForgotPassword'])->name('auth.forgotpass');
     Route::get('/get-password/{email}', [AuthController::class, 'getPassword'])->name('auth.getpass');
     Route::post('/get-password/{email}', [AuthController::class, 'getForgotPassword']);
 

@@ -90,10 +90,6 @@ class AuthController extends Controller
     {
         $result = $this->authService->resetPasswordView($email);
 
-        if (!$result) {
-            return redirect('/')->with('error', 'Không tìm thấy người dùng.');
-        }
-
         return view('auth.getPassword', ['email' => $email]);
     }
 
@@ -104,7 +100,6 @@ class AuthController extends Controller
         if ($result) {
             return to_route('auth.login')->with('success', 'Đổi mật khẩu thành công, bạn có thể đăng nhập');
         }
-            return redirect('/')->with('error', 'Không tìm thấy người dùng.');
 
     }
 
