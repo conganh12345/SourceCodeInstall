@@ -25,8 +25,6 @@ class AllPostController extends Controller
     {
         $posts = $this->postService->getAllPosts();
         return view('admin.all-post.index', compact('posts'));
-
-        // return view('lol');
     }
 
     /**
@@ -57,8 +55,7 @@ class AllPostController extends Controller
      */
     public function show(Post $post)
     {
-
-        return view('admin.all-post.article-details', compact('post'));
+        return view('admin.all-post.show', compact('post'));
     }
 
 

@@ -17,7 +17,6 @@ class CheckLogin
      */
     public function handle(Request $request, Closure $next): Response
     {
-
         if (Auth::check()) {
             $user = Auth::user();
 
@@ -46,8 +45,6 @@ class CheckLogin
                     break;
             }
         }
-
         return back()->with('error', 'Vui lòng đăng nhập trước khi vào trang');
-
-}
+    }
 }

@@ -51,23 +51,19 @@ class Post extends Model implements HasMedia
     public function getThumbnailAttribute()
     {
         // Lấy URL của ảnh đại diện (thumbnail)
-        $media = $this->getFirstMedia(); // No collection specified
+        $media = $this->getFirstMedia();
 
         if ($media) {
             // Sử dụng phương thức `getUrl` để lấy URL từ disk 'public'
             $url = $media->getUrl();
-
             // Kiểm tra xem URL đã có cổng 8000 chưa
             if (strpos($url, 'http://localhost') !== false && strpos($url, 'http://localhost:8000') === false) {
                 // Nếu không có cổng 8000, thêm nó vào URL
                 $url = str_replace('http://localhost', 'http://localhost:8000', $url);
             }
-
             return $url;
         }
-
         return asset('path/to/default-thumbnail.jpg');
-
     }
 
 

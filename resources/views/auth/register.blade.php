@@ -71,22 +71,11 @@
                 </div>
             </form>
 
-
-
-
         <div style="margin-top: 20px; text-align: center;">
             <p>Đã có tài khoản? <a href="{{ url('/auth/login') }}">Đăng nhập ngay</a></p>
         </div>
         </div>
-        <!-- /.register-box-body -->
     </div>
-    <!-- /.register-box -->
-
-    <!-- Thêm đường dẫn đến các thư viện cần thiết của AdminLTE -->
-    <script src="https://adminlte.io/themes/v3/plugins/jquery/jquery.min.js"></script>
-    <script src="https://adminlte.io/themes/v3/plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
-    <script src="https://adminlte.io/themes/v3/dist/js/adminlte.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js" integrity="sha512-VEd+nq25CkR676O+pLBnDW09R7VQX9Mdiij052gVCp5yVH3jGtH70Ho/UUv4mJDsEdTvqRCFZg0NKGiojGnUCw==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 
     @if (Session::has('success'))
     <script>
@@ -96,15 +85,21 @@
         }
         toastr.success("{{ Session::get('success') }}");
     </script>
-@endif
-@if (Session::has('error'))
-    <script>
-        toastr.options= {
-            "progressBar" :true,
-            "closebutton" :true,
-        }
-        toastr.error("{{ Session::get('error') }}");
-    </script>
-@endif
+    @endif
+    @if (Session::has('error'))
+        <script>
+            toastr.options= {
+                "progressBar" :true,
+                "closebutton" :true,
+            }
+            toastr.error("{{ Session::get('error') }}");
+        </script>
+    @endif
+
+    <script src="https://adminlte.io/themes/v3/plugins/jquery/jquery.min.js"></script>
+    <script src="https://adminlte.io/themes/v3/plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
+    <script src="https://adminlte.io/themes/v3/dist/js/adminlte.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js" integrity="sha512-VEd+nq25CkR676O+pLBnDW09R7VQX9Mdiij052gVCp5yVH3jGtH70Ho/UUv4mJDsEdTvqRCFZg0NKGiojGnUCw==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+
 </body>
 </html>

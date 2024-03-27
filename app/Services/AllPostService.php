@@ -16,10 +16,12 @@ class AllPostService
 
         return $this->transformPosts($posts);
     }
+
     protected function transformPosts($posts)
     {
         return $posts;
     }
+
     public function createPost($user, $requestData)
     {
         $post = new Post([
@@ -37,7 +39,6 @@ class AllPostService
 
             // Thêm ảnh vào disk 'public' mà không thuộc collection nào cả
             $post->addMedia($thumbnailFile)->toMediaCollection();
-
         }
 
         return $post;
@@ -60,7 +61,6 @@ class AllPostService
 
     public function getPostById(string $id)
     {
-
         $post = Post::find($id);
 
         return $post;
@@ -68,7 +68,6 @@ class AllPostService
 
     public function updatePost($post, $requestData)
     {
-
         $previousStatus = $post->status;
 
         $post->title = $requestData->input('title');
@@ -83,14 +82,12 @@ class AllPostService
             if ($post->getMedia()->count() > 0) {
                 $post->getMedia()[0]->delete();
             }
-
             // Thêm ảnh mới vào media collection với tên 'thumbnail'
             $thumbnailFile = $requestData->file('thumbnail');
             $post->addMedia($thumbnailFile)->toMediaCollection();
         }
 
         $post->save();
-
 
         if ($previousStatus != $post->status) {
             $this->sendPostStatusEmail($post);
@@ -105,47 +102,43 @@ class AllPostService
             'email' => $post->user->email,
             'status' => $post->status,
             'title' => $post->title,
-
         ];
 
         dispatch(new SendEmailJob($data));
     }
     public function showArticleDetails()
-        {
+    {
 
+    $statusActive = UserStatus::ACTIVE;
+    $posts = Post::where('status', $statusActive)->get();
+
+    return $this->transformPosts($posts);
+
+    }
+    public function showNewsDetails($slug)
+    {
         $statusActive = UserStatus::ACTIVE;
-        $posts = Post::where('status', $statusActive)->get();
+        $post = Post::where('slug', $slug)
+                    ->where('status', $statusActive)
+                    ->first();
 
-        return $this->transformPosts($posts);
+        return $this->transformPosts($post);
+    }
 
-        }
-        public function showNewsDetails($slug)
-        {
+    public function searchPosts($searchType, $searchValue)
+    {
+        $query = Post::query();
 
-            $statusActive = UserStatus::ACTIVE;
-            $post = Post::where('slug', $slug)
-                        ->where('status', $statusActive)
-                        ->first();
-
-            return $this->transformPosts($post);
-
-        }
-
-        public function searchPosts($searchType, $searchValue)
-        {
-            $query = Post::query();
-
-            if ($searchType === 'email') {
-                $query->whereHas('user', function ($userQuery) use ($searchValue) {
-                    $userQuery->where('email', 'like', '%' . $searchValue . '%');
-                });
-            }
-
-            if ($searchType === 'title') {
-                $query->where('title', 'like', '%' . $searchValue . '%');
-            }
-
-            return $query->get();
+        if ($searchType === 'email') {
+            $query->whereHas('user', function ($userQuery) use ($searchValue) {
+                $userQuery->where('email', 'like', '%' . $searchValue . '%');
+            });
         }
 
+        if ($searchType === 'title') {
+            $query->where('title', 'like', '%' . $searchValue . '%');
+        }
+
+        return $query->get();
+    }
 }

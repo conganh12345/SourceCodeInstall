@@ -25,8 +25,6 @@ class AuthController extends Controller
         $this->authService = $authService;
     }
 
-
-
     public function showFormRegister()
     {
         return view('auth.register');
@@ -34,7 +32,6 @@ class AuthController extends Controller
 
     public function showFormLogin()
     {
-
         return view('auth.login');
     }
 
@@ -66,7 +63,6 @@ class AuthController extends Controller
             return to_route('article_details')->with('success', 'Đăng nhập thành công');
         }
             return to_route('auth.login')->with('error', 'Đăng nhập thất bại');
-
     }
 
     public function forgotPassword()
@@ -76,14 +72,12 @@ class AuthController extends Controller
 
     public function postForgotPassword(EmailRequest $request)
     {
-
         $result = $this->authService->forgotPassword($request);
 
         if ($result) {
             return to_route('auth.login')->with('success', 'Vui lòng kiểm tra email để thực hiện thay đổi mật khẩu');
         }
             return back()->with('error', 'Email không tồn tại trong hệ thống');
-
     }
 
     public function getPassword($email)
@@ -100,16 +94,14 @@ class AuthController extends Controller
         if ($result) {
             return to_route('auth.login')->with('success', 'Đổi mật khẩu thành công, bạn có thể đăng nhập');
         }
-
     }
 
     public function editProfile()
     {
-
         $user = Auth::user();
         $result = $this->authService->editProfile($user);
 
-        return view('post.update-profile', compact('user'));
+        return view('admin.profile.update-profile', compact('user'));
     }
 
     public function editedProfile(ProfileRequest $request)
@@ -121,7 +113,6 @@ class AuthController extends Controller
             return to_route('update_profile')->with('success', 'Hồ sơ đã được cập nhật thành công');
         }
             return back()->with('error', 'Cập nhật hồ sơ thất bại');
-
     }
 
 

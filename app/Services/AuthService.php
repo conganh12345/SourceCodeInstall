@@ -18,7 +18,6 @@ use App\Mail\MailForPassWord;
 
 class AuthService
 {
-
     public function registerUser($requestData)
     {
         $user = User::create([
@@ -29,14 +28,10 @@ class AuthService
             'status' => '0',
         ]);
 
-
         Mail::to($user->email)->send(new VerifyAccount($user));
-
 
         return true;
     }
-
-
 
     public function loginUser($request)
     {
@@ -55,7 +50,6 @@ class AuthService
         $existingUser = User::where('email', $request->input('email'))->first();
 
         Mail::to($existingUser->email)->send(new MailForPassWord($existingUser));
-
 
         return true;
     }
@@ -83,7 +77,6 @@ class AuthService
 
     public function editProfile($user)
     {
-
         return true;
     }
 
@@ -95,6 +88,6 @@ class AuthService
             'address' => $requestData->input('address'),
         ]);
 
-        return true; // Thành công
+        return true;
     }
 }

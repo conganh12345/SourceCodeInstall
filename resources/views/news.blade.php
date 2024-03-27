@@ -3,21 +3,16 @@
 @section('title', 'Danh sách bài viết')
 
 @section('contents')
-
-
-    <!-- Content Header (Page header) -->
     <section class="content-header">
         <div class="container-fluid">
             <div class="row mb-2">
                 <div class="col-sm-6">
                     <h1>Tin tức</h1>
                 </div>
-
             </div>
-        </div><!-- /.container-fluid -->
+        </div>
     </section>
 
-    <!-- Main content -->
     <section class="content">
         <div class="container-fluid">
             <div class="row">
@@ -26,10 +21,8 @@
                         <div class="card-header">
                             <h3 class="card-title">Bài viết mới nhất</h3>
                         </div>
-                        <!-- /.card-header -->
                         <div class="card-body">
                             <table class="table table-bordered">
-
                                 <tbody>
                                     <div class="row">
                                         @foreach($posts as $post)
@@ -51,32 +44,21 @@
                                             </div>
                                         @endforeach
                                     </div>
-
                                 </tbody>
-
                             </table>
-
                         </div>
-                        <!-- /.card-body -->
-
                     </div>
-                    <!-- /.card -->
                 </div>
-                <!-- /.col -->
             </div>
-            <!-- /.row -->
-        </div><!-- /.container-fluid -->
+        </div>
     </section>
-    <!-- /.content -->
 @endsection
 
-<!-- Thêm thẻ meta để xác định viewport -->
 @section('head')
     @parent
     <meta name="viewport" content="width=device-width, initial-scale=1">
 @endsection
 
-<!-- Thêm script để xử lý khi nhấn nút Home -->
 
 
 

@@ -19,7 +19,6 @@ class CheckLogout
         if (Auth::check()) {
             return to_route('article_details');
         }
-
         return $next($request);
     }
 }

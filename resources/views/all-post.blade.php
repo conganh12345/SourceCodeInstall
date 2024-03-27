@@ -5,8 +5,6 @@
 
 @section('contents')
 
-
-    <!-- Content Header (Page header) -->
     <section class="content-header">
         <div class="container-fluid">
             <div class="row mb-2">
@@ -17,13 +15,11 @@
                     <!-- Button to create a new post -->
                     {{-- <a href="#" class="btn btn-success">Tạo mới</a> --}}
                     <!-- Button to delete all posts (you may replace '#delete-all' with the actual route) -->
-
                 </div>
             </div>
-        </div><!-- /.container-fluid -->
+        </div>
     </section>
 
-    <!-- Main content -->
     <section class="content">
         <div class="container-fluid">
             <div class="row">
@@ -32,10 +28,8 @@
                         <div class="card-header">
                             <h3 class="card-title">Bài viết mới nhất</h3>
                         </div>
-                        <!-- /.card-header -->
                         <div class="card-body">
                             <table class="table table-bordered">
-
                                 <tbody>
                                     <div class="row">
                                         @foreach($posts as $post)
@@ -57,38 +51,25 @@
                                             </div>
                                         @endforeach
                                     </div>
-
                                 </tbody>
-
                             </table>
-
                         </div>
-                        <!-- /.card-body -->
-
                     </div>
-                    <!-- /.card -->
                 </div>
-                <!-- /.col -->
             </div>
-            <!-- /.row -->
-        </div><!-- /.container-fluid -->
+        </div>
     </section>
-    <!-- /.content -->
 @endsection
 
-<!-- Thêm thẻ meta để xác định viewport -->
 @section('head')
     @parent
     <meta name="viewport" content="width=device-width, initial-scale=1">
 @endsection
 
-<!-- Thêm script để xử lý khi nhấn nút Home -->
 @section('scripts')
     @parent
     <script>
-        // Thêm sự kiện click cho nút Xem danh sách bài viết
         document.getElementById('listpost-link').addEventListener('click', function() {
-            // Chuyển đến trang Listpost khi click
             window.location.href = "{{ route('admin.listPosts') }}";
         });
     </script>
@@ -99,7 +80,6 @@
         $(document).ready(function(){
             $('.deletePost').click(function(e){
                 e.preventDefault();
-
                 var post_id = $(this).val();
                 $('#post_id').val(post_id);
                 $('#deleteModal').modal('show');

@@ -47,10 +47,12 @@ class User extends Authenticatable
         'email_verified_at' => 'datetime',
         'password' => 'hashed',
     ];
+
     public function getNameAttribute(): string
     {
         return $this->first_name . ' ' . $this->last_name;
     }
+
     public function posts()
     {
         return $this->hasMany(Post::class);
@@ -60,7 +62,6 @@ class User extends Authenticatable
     protected static function boot()
     {
         parent::boot();
-
 
         static::created(function ($user) {
 

@@ -18,7 +18,7 @@ class CheckRole
     public function handle(Request $request, Closure $next, ...$roles): Response
     {
         if (!Auth::user()->hasAnyRole($roles)) {
-            abort(404); // Page not found
+            abort(404);
         }
 
         return $next($request);

@@ -7,23 +7,20 @@ use App\Models\User;
 
 class UserService
 {
-
     public function getAllUsers()
     {
         return User::all();
     }
 
     public function getUserById(string $id)
-{
+    {
+        $user = User::find($id);
 
-    $user = User::find($id);
+        return $user;
+    }
 
-    return $user;
-}
-
-public function updateUser($user, $requestData)
-{
-
+    public function updateUser($user, $requestData)
+    {
             $user->first_name = $requestData->input('first_name');
             $user->last_name = $requestData->input('last_name');
             $user->address = $requestData->input('address');
@@ -31,9 +28,7 @@ public function updateUser($user, $requestData)
 
             $user->save();
 
-
             return $user;
-
     }
 
     public function searchUser($searchType, $searchValue)

@@ -16,6 +16,7 @@ class PostController extends Controller
     {
         $this->postService = $postService;
     }
+
     /**
      * Display a listing of the resource.
      */
@@ -23,7 +24,7 @@ class PostController extends Controller
     {
         $posts = $this->postService->getUserPosts(Auth::user());
 
-        return view('post.index', compact('posts'));
+        return view('admin.post.index', compact('posts'));
     }
 
     /**
@@ -31,7 +32,7 @@ class PostController extends Controller
      */
     public function create()
     {
-        return view('post.create');
+        return view('admin.post.create');
     }
 
     /**
@@ -39,8 +40,6 @@ class PostController extends Controller
      */
     public function store(AddpostRequest $request)
     {
-
-
         $result = $this->postService->createPost(Auth::user(), $request);
 
 
@@ -56,9 +55,7 @@ class PostController extends Controller
      */
     public function show(Post $post)
     {
-
-        return view('post.article-details', compact('post'));
-
+        return view('admin.post.show', compact('post'));
     }
 
     /**
@@ -66,8 +63,7 @@ class PostController extends Controller
      */
     public function edit(Post $post)
     {
-
-        return view('post.edit', compact('post'));
+        return view('admin.post.edit', compact('post'));
     }
 
     /**
@@ -75,7 +71,6 @@ class PostController extends Controller
      */
     public function update(EditPostRequest $request, Post $post)
     {
-
         $post = $this->postService->updatePost($post, $request);
 
         return to_route('admin.listPosts')->with('success', 'Cập nhật bài viết thành công');
@@ -113,7 +108,7 @@ class PostController extends Controller
     {
         $post = $this->postService->showNewsDetails($slug);
 
-        return view('post.article-details', compact('post'));
+        return view('admin.post.show', compact('post'));
     }
 
     public function allnews()
@@ -126,7 +121,7 @@ class PostController extends Controller
     {
         $post = $this->postService->showNewsDetails($slug);
 
-        return view('post.article-details', compact('post'));
+        return view('admin.post.show', compact('post'));
     }
 
 }

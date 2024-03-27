@@ -8,14 +8,11 @@
             <div class="card-header">
                 <h3 class="card-title">Chi tiết bài viết</h3>
             </div>
-            <!-- /.card-header -->
             <div class="card-body">
                 <h2>{{ $post->title }}</h2>
                 <p>{{ $post->description }}</p>
                 <p>{!! $post->content !!}</p>
             </div>
-            <!-- /.card-body -->
         </div>
-        <!-- /.card -->
     </section>
 @endsection
